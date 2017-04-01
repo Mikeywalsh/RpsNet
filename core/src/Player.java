@@ -11,7 +11,11 @@ abstract public class Player
 
     abstract public void makeMove();
 
-    public void resetTurn
+    public void resetTurn()
+    {
+        chosenMove = null;
+    }
+
     public GameMove getChosenMove()
     {
         return chosenMove;
