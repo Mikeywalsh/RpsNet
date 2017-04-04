@@ -1,4 +1,4 @@
-package com.rpsnet;
+package com.rpsnet.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;

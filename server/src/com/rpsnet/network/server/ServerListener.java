@@ -1,9 +1,8 @@
-package com.rpsnet.server;
+package com.rpsnet.network.server;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
-import com.esotericsoftware.kryonet.Server;
-import com.rpsnet.Packets;
+import com.rpsnet.network.Packets;
 
 public class ServerListener extends Listener
 {

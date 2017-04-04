@@ -1,4 +1,4 @@
-package com.rpsnet;
+package com.rpsnet.network;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;

@@ -1,4 +1,4 @@
-package com.rpsnet.server;
+package com.rpsnet.network.server;
 
 import java.io.IOException;
 

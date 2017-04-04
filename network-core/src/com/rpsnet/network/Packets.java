@@ -1,4 +1,4 @@
-package com.rpsnet;
+package com.rpsnet.network;
 
 /**
  * Holds classes that will be transferred over the network
