@@ -1,6 +1,9 @@
+package com.rpsnet.server;
+
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
+import com.rpsnet.Packets;
 
 public class ServerListener extends Listener
 {
@@ -23,7 +26,7 @@ public class ServerListener extends Listener
 //            if(c.name == null)
 //            {
 //                c.name = ((Packets.RegisterName)o).name;
-                System.out.println("Client " + connection.getID() + " has registered name: " + ((Packets.RegisterName)o).name);
+            System.out.println("Client " + connection.getID() + " has registered name: " + ((Packets.RegisterName)o).name);
 //            }
 //            else
 //            {

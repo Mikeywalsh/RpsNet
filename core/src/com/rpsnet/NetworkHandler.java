@@ -1,7 +1,9 @@
+package com.rpsnet;
+
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.EndPoint;
 
-public class Network
+public class NetworkHandler
 {
     static public final int port = 54555;
 
