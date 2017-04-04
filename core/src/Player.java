@@ -16,6 +16,11 @@ abstract public class Player
         chosenMove = null;
     }
 
+    public void scorePoint()
+    {
+        score++;
+    }
+
     public GameMove getChosenMove()
     {
         return chosenMove;
