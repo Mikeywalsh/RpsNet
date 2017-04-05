@@ -6,5 +6,5 @@ sourceSets.main.java.srcDirs = [ "src/" ]
 
 
 eclipse.project {
-    name = "game-core"
+    name = appName
 }

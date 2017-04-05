@@ -1,4 +1,4 @@
-package com.rpsnet.desktop.com.rpsnet.game.desktop;
+package com.rpsnet.game.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
