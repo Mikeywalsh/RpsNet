@@ -1,0 +1,20 @@
+
+buttons.png
+size: 512,64
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+greenButtonDown
+  rotate: false
+  xy: 194, 6
+  size: 190, 45
+  orig: 190, 45
+  offset: 0, 0
+  index: -1
+greenButtonUp
+  rotate: false
+  xy: 2, 2
+  size: 190, 49
+  orig: 190, 49
+  offset: 0, 0
+  index: -1

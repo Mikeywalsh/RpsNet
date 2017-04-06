@@ -6,7 +6,7 @@ public class RPSNet extends Game
 {
 	@Override
 	public void create () {
-		setScreen(new GameScreen());
+		setScreen(new MenuScreen());
 	}
 
 	@Override

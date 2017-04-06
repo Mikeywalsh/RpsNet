@@ -9,52 +9,56 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.rpsnet.game.actors.MainMenuActors;
 
-public class GameScreen implements Screen
+public class MenuScreen implements Screen
 {
     GameClient gameClient;
-
+    Stage stage;
+    Table table;
     SpriteBatch batch;
-    Texture img;
+    Texture backgroundImg;
 
-    FreeTypeFontGenerator generator;
-    FreeTypeFontGenerator.FreeTypeFontParameter parameter;
+    public MenuScreen() {
+        stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
+        table = new Table();
+        table.setFillParent(true);
 
-    BitmapFont font;
-
-    public GameScreen() {
+        table.add(new MainMenuActors());
+        stage.addActor(table);
 
         batch = new SpriteBatch();
-        img = new Texture("badlogic.jpg");
-        //font = new BitmapFont();
-        generator = new FreeTypeFontGenerator(Gdx.files.internal("gameFont.ttf"));
-        parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-
-        //Create a bitmapfont from the freetype font generator and then dispose the generator
-        parameter.size = 24;
-        font = generator.generateFont(parameter);
-        generator.dispose();
+        backgroundImg = new Texture("background.jpg");
 
         gameClient = new GameClient();
         gameClient.start();
+
     }
 
     @Override
     public void render (float delta) {
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+
+        Gdx.gl.glClearColor(1, 0, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+
         batch.begin();
-        if(gameClient.connected) {
-            font.draw(batch, "Welcome, " + gameClient.name, 200, 200);
-        } else {
-            font.draw(batch, "Input your name...", 200, 200);
-        }
+        batch.draw(backgroundImg,0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+//        if(gameClient.connected) {
+//            font.draw(batch, "Welcome, " + gameClient.name, 200, 200);
+//        } else {
+//            font.draw(batch, "Input your name...", 200, 200);
+//        }
         batch.end();
+
+        stage.draw();
     }
 
     @Override
@@ -85,6 +89,6 @@ public class GameScreen implements Screen
     @Override
     public void dispose () {
         batch.dispose();
-        img.dispose();
+        backgroundImg.dispose();
     }
 }
