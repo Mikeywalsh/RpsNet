@@ -29,11 +29,16 @@ public class MainMenuActors extends Table
     private final FreeTypeFontGenerator.FreeTypeFontParameter parameter;
 
     private final Label logoText;
-    private final Label connectionText;
+    private final Label disconnectedText;
+
+    private final Label welcomeText;
+    private final Label onlinePlayersText;
+
     private final TextButton playButton;
     private final TextButton quitButton;
 
-    private final Table connectionWidgets;
+    private final Table disconnectedWidgets;
+    private final Table connectedWidgets;
     private final Table menuWidgets;
 
     public MainMenuActors()
@@ -45,7 +50,7 @@ public class MainMenuActors extends Table
         //Create a bitmapfont from the freetype font generator and then dispose the generator
         parameter.size = 24;
         bigFont = generator.generateFont(parameter);
-        parameter.size = 12;
+        parameter.size = 16;
         smallFont = generator.generateFont(parameter);
         generator.dispose();
 
@@ -86,7 +91,9 @@ public class MainMenuActors extends Table
 
         //Create Labels
         logoText = new Label("Rock Paper Scissors!", bigLabelStyle);
-        connectionText = new Label("Not connected", smallLabelStyle);
+        disconnectedText = new Label("Not connected", smallLabelStyle);
+        welcomeText = new Label("Welcome, ", smallLabelStyle);
+        onlinePlayersText = new Label("Players online: -", smallLabelStyle);
 
         //Create the menu widgets
         menuWidgets = new Table();
@@ -99,20 +106,44 @@ public class MainMenuActors extends Table
         menuWidgets.row();
         menuWidgets.add(quitButton);
 
-        //Create the connection widgets
-        connectionWidgets = new Table();
-        connectionWidgets.setFillParent(true);
+        //Create the disconnected widgets
+        disconnectedWidgets = new Table();
+        disconnectedWidgets.setFillParent(true);
 
-        //Add the actors to the connection info
-        connectionWidgets.left();
-        connectionWidgets.top();
-        connectionWidgets.add(connectionText);
+        //Add the actors to the disconnected widget
+        disconnectedWidgets.left();
+        disconnectedWidgets.top();
+        disconnectedWidgets.add(disconnectedText);
+
+        //Create the connected widgets
+        connectedWidgets = new Table();
+        connectedWidgets.setFillParent(true);
+        connectedWidgets.setVisible(false);
+
+        //Add the actors to the connected widget
+        connectedWidgets.left();
+        connectedWidgets.top();
+        connectedWidgets.add(welcomeText);
+        connectedWidgets.row();
+        connectedWidgets.add(onlinePlayersText);
     }
 
-    public Table getConnectionWidgets()
+    public void updateWelcomeText(String val)
     {
-        return connectionWidgets;
+        welcomeText.setText(val);
     }
+
+    public void updateOnlinePlayerText(String val)
+    {
+        onlinePlayersText.setText(val);
+    }
+
+    public Table getDisconnectedWidgets()
+    {
+        return disconnectedWidgets;
+    }
+
+    public Table getConnectedWidgets() { return connectedWidgets; }
 
     public Table getMenuWidgets()
     {

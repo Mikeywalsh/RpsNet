@@ -1,7 +1,10 @@
 package com.rpsnet.game;
 
 import com.esotericsoftware.kryonet.Client;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.minlog.Log;
 import com.rpsnet.network.NetworkHandler;
+import com.rpsnet.network.Packets;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -10,6 +13,10 @@ public class GameClient extends Thread
 {
     Client client;
     String name;
+
+    private Connection serverConnection;
+
+    private int playerCount;
 
     public void run()
     {
@@ -37,12 +44,36 @@ public class GameClient extends Thread
         catch (IOException ex)
         {
             System.out.println("Could not find server...");
-            //System.exit(1);
         }
     }
 
+    public void requestPlayerCount()
+    {
+        if(serverConnection != null)
+        {
+            serverConnection.sendTCP(new Packets.RequestPlayerCount());
+        }
+        else
+        {
+            Log.error("Tried to request player count when there was no server connection!");
+        }
+    }
+
+    public int getPlayerCount() { return playerCount;}
+
+    public String getPlayerName(){ return name; }
+
+    public void setServerConnection(Connection con) { serverConnection = con; }
+
+    public void setPlayerCount(int val) { playerCount = val; }
+
     public boolean connected()
     {
+        if(client == null)
+        {
+            return false;
+        }
+
         return client.isConnected();
     }
 }

@@ -26,8 +26,8 @@ public class MainMenuScreen implements Screen
     Texture backgroundImg;
     MainMenuActors mainMenuActors;
 
-    private final float CONNECTION_CHECK = 5;
-    float checkTimer = 0;
+    private final float CONNECTION_REFRESH_TIME = 5;
+    float refreshTimer = 0;
 
     public MainMenuScreen() {
         //Setup the stage
@@ -36,7 +36,8 @@ public class MainMenuScreen implements Screen
 
         //Setup the actors
         mainMenuActors = new MainMenuActors();
-        stage.addActor(mainMenuActors.getConnectionWidgets());
+        stage.addActor(mainMenuActors.getDisconnectedWidgets());
+        stage.addActor(mainMenuActors.getConnectedWidgets());
         stage.addActor(mainMenuActors.getMenuWidgets());
 
         batch = new SpriteBatch();
@@ -52,12 +53,28 @@ public class MainMenuScreen implements Screen
     public void render (float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
         batch.begin();
         batch.draw(backgroundImg,0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.end();
 
         stage.draw();
+
+        //Update information that depends on the server connection
+        refreshTimer += delta;
+        if(refreshTimer > CONNECTION_REFRESH_TIME)
+        {
+            refreshTimer -= CONNECTION_REFRESH_TIME;
+            mainMenuActors.getConnectedWidgets().setVisible(gameClient.connected());
+            mainMenuActors.getDisconnectedWidgets().setVisible(!gameClient.connected());
+
+            if(gameClient.connected())
+            {
+                gameClient.requestPlayerCount();
+                mainMenuActors.updateWelcomeText("Welcome, " + gameClient.getPlayerName());
+                mainMenuActors.updateOnlinePlayerText("Players online: " + gameClient.getPlayerCount());
+                //System.out.println("Updated player count!");
+            }
+        }
     }
 
     @Override

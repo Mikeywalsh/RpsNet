@@ -4,6 +4,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
 import com.rpsnet.network.NetworkHandler;
+import com.rpsnet.network.Packets;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -42,8 +43,53 @@ public class GameServer
         }
         else
         {
-            Log.debug("Client with connection ID: " + connection.getID() + " is already connected!");
+            Log.info("Client with connection ID: " + connection.getID() + " is already connected!");
         }
+    }
+
+    public void removeClient(Connection connection)
+    {
+        if(remoteClients.containsKey(connection))
+        {
+            remoteClients.remove(connection);
+        }
+        else
+        {
+            Log.error("Client with connection ID: " + connection.getID() + " is not in client list!");
+        }
+    }
+
+    public void registerName(Connection connection, String name)
+    {
+        if(remoteClients.containsKey(connection))
+        {
+            remoteClients.get(connection).setName(name);
+            Log.info("Client " + connection.getID() + " has registered name: " + name);
+        }
+        else
+        {
+            Log.error("Tried to set a name for a client that does not exist! ID: " + connection.getID());
+        }
+    }
+
+    public int playerCount()
+    {
+        return remoteClients.size();
+    }
+
+    public int playerCountInState(ClientState state)
+    {
+        int count = 0;
+
+        for (RemoteClient r : remoteClients.values())
+        {
+            if(r.getClientState() == state)
+            {
+                count++;
+            }
+        }
+
+        return count;
     }
 
     public static void main(String[] args) throws IOException {

@@ -12,4 +12,10 @@ public class Packets
     public static class RegisterName {
         public String name;
     }
+
+    public static class RequestPlayerCount { }
+
+    public static class PlayerCount {
+        public int count;
+    }
 }

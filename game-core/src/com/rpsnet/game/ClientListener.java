@@ -17,11 +17,13 @@ public class ClientListener extends Listener
 
     public void connected(Connection connection)
     {
-        System.out.println("Connected to server...");
-
         Packets.RegisterName registerName = new Packets.RegisterName();
         registerName.name = gameClient.name;
         connection.sendTCP(registerName);
+
+        connection.sendTCP(new Packets.RequestPlayerCount());
+
+        gameClient.setServerConnection(connection);
     }
 
     public void disconnected(Connection connection)
@@ -31,6 +33,9 @@ public class ClientListener extends Listener
 
     public void received(Connection connection, Object o)
     {
-
+        if(o instanceof Packets.PlayerCount)
+        {
+            gameClient.setPlayerCount(((Packets.PlayerCount)o).count);
+        }
     }
 }

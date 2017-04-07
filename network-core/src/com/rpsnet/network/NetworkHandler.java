@@ -12,5 +12,7 @@ public class NetworkHandler
         Kryo kryo = endPoint.getKryo();
         kryo.register(Packets.GameMessage.class);
         kryo.register(Packets.RegisterName.class);
+        kryo.register(Packets.RequestPlayerCount.class);
+        kryo.register(Packets.PlayerCount.class);
     }
 }

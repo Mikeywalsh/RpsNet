@@ -1,6 +1,7 @@
 package com.rpsnet.network.server;
 
 import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.minlog.Log;
 
 public class RemoteClient
 {
@@ -19,4 +20,17 @@ public class RemoteClient
     public String getName() { return name; }
 
     public ClientState getClientState() { return clientState; }
+
+    public void setName(String val)
+    {
+        if(clientState == ClientState.NAMELESS)
+        {
+            name = val;
+            clientState = ClientState.READY;
+        }
+        else
+        {
+            Log.error("Tried to set a name for a nameless client!");
+        }
+    }
 }
