@@ -1,12 +1,13 @@
 package com.rpsnet.game;
 
 import com.badlogic.gdx.Game;
+import com.rpsnet.game.screens.MainMenuScreen;
 
 public class RPSNet extends Game
 {
 	@Override
 	public void create () {
-		setScreen(new MenuScreen());
+		setScreen(new MainMenuScreen());
 	}
 
 	@Override

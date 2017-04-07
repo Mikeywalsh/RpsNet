@@ -2,13 +2,23 @@ package com.rpsnet.network.server;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.esotericsoftware.minlog.Log;
 import com.rpsnet.network.Packets;
 
 public class ServerListener extends Listener
 {
+    GameServer gameServer;
+
+    public ServerListener(GameServer g)
+    {
+        super();
+        gameServer = g;
+    }
+
     public void connected(Connection connection)
     {
-        System.out.println("Client connected with ID: " + connection.getID());
+        Log.info("Client connected with ID: " + connection.getID());
+        gameServer.addClient(connection);
     }
 
     public void disconnected(Connection connection)

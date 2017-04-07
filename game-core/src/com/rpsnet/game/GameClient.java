@@ -11,8 +11,6 @@ public class GameClient extends Thread
     Client client;
     String name;
 
-    boolean connected;
-
     public void run()
     {
         //Prompt the user for their name before connecting them
@@ -35,12 +33,16 @@ public class GameClient extends Thread
         try
         {
             client.connect(5000, "127.0.0.1", NetworkHandler.port);
-            connected = true;
         }
         catch (IOException ex)
         {
             System.out.println("Could not find server...");
             //System.exit(1);
         }
+    }
+
+    public boolean connected()
+    {
+        return client.isConnected();
     }
 }

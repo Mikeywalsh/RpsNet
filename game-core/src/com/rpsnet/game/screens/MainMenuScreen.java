@@ -1,4 +1,4 @@
-package com.rpsnet.game;
+package com.rpsnet.game.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -15,24 +15,29 @@ import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.rpsnet.game.GameClient;
 import com.rpsnet.game.actors.MainMenuActors;
 
-public class MenuScreen implements Screen
+public class MainMenuScreen implements Screen
 {
     GameClient gameClient;
     Stage stage;
-    Table table;
     SpriteBatch batch;
     Texture backgroundImg;
+    MainMenuActors mainMenuActors;
 
-    public MenuScreen() {
+    private final float CONNECTION_CHECK = 5;
+    float checkTimer = 0;
+
+    public MainMenuScreen() {
+        //Setup the stage
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
-        table = new Table();
-        table.setFillParent(true);
 
-        table.add(new MainMenuActors());
-        stage.addActor(table);
+        //Setup the actors
+        mainMenuActors = new MainMenuActors();
+        stage.addActor(mainMenuActors.getConnectionWidgets());
+        stage.addActor(mainMenuActors.getMenuWidgets());
 
         batch = new SpriteBatch();
         backgroundImg = new Texture("background.jpg");
@@ -40,22 +45,16 @@ public class MenuScreen implements Screen
         gameClient = new GameClient();
         gameClient.start();
 
+        Gdx.gl.glClearColor(1, 0, 1, 1);
     }
 
     @Override
     public void render (float delta) {
-
-        Gdx.gl.glClearColor(1, 0, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 
         batch.begin();
         batch.draw(backgroundImg,0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-//        if(gameClient.connected) {
-//            font.draw(batch, "Welcome, " + gameClient.name, 200, 200);
-//        } else {
-//            font.draw(batch, "Input your name...", 200, 200);
-//        }
         batch.end();
 
         stage.draw();

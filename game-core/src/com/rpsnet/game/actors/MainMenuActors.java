@@ -18,17 +18,23 @@ public class MainMenuActors extends Table
 {
     private final Skin skin;
     private final TextureAtlas uiAtlas;
-    private final BitmapFont font;
+    private final BitmapFont smallFont;
+    private final BitmapFont bigFont;
 
     private final TextButton.TextButtonStyle textButtonStyle;
-    private final Label.LabelStyle labelStyle;
+    private final Label.LabelStyle smallLabelStyle;
+    private final Label.LabelStyle bigLabelStyle;
 
     private final FreeTypeFontGenerator generator;
     private final FreeTypeFontGenerator.FreeTypeFontParameter parameter;
 
-    private final Label mainText;
+    private final Label logoText;
+    private final Label connectionText;
     private final TextButton playButton;
     private final TextButton quitButton;
+
+    private final Table connectionWidgets;
+    private final Table menuWidgets;
 
     public MainMenuActors()
     {
@@ -38,7 +44,9 @@ public class MainMenuActors extends Table
 
         //Create a bitmapfont from the freetype font generator and then dispose the generator
         parameter.size = 24;
-        font = generator.generateFont(parameter);
+        bigFont = generator.generateFont(parameter);
+        parameter.size = 12;
+        smallFont = generator.generateFont(parameter);
         generator.dispose();
 
         //Create a skin from the UI Atlas file
@@ -48,7 +56,7 @@ public class MainMenuActors extends Table
 
         //Create button style
         textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.font = font;
+        textButtonStyle.font = bigFont;
         textButtonStyle.up = skin.getDrawable("greenButtonUp");
         textButtonStyle.down = skin.getDrawable("greenButtonDown");
 
@@ -70,18 +78,44 @@ public class MainMenuActors extends Table
             }
         });
 
-        //Create label style
-        labelStyle = new Label.LabelStyle();
-        labelStyle.font = font;
+        //Create label styles
+        smallLabelStyle = new Label.LabelStyle();
+        smallLabelStyle.font = smallFont;
+        bigLabelStyle = new Label.LabelStyle();
+        bigLabelStyle.font = bigFont;
 
-        //Create main Label
-        mainText = new Label("Rock Paper Scissors!", labelStyle);
+        //Create Labels
+        logoText = new Label("Rock Paper Scissors!", bigLabelStyle);
+        connectionText = new Label("Not connected", smallLabelStyle);
 
-        //Add the actors to the main menu
-        add(mainText).padBottom(25);
-        row();
-        add(playButton).padBottom(5);
-        row();
-        add(quitButton);
+        //Create the menu widgets
+        menuWidgets = new Table();
+        menuWidgets.setFillParent(true);
+
+        //Add the actors to the menu
+        menuWidgets.add(logoText).padBottom(25);
+        menuWidgets.row();
+        menuWidgets.add(playButton).padBottom(5);
+        menuWidgets.row();
+        menuWidgets.add(quitButton);
+
+        //Create the connection widgets
+        connectionWidgets = new Table();
+        connectionWidgets.setFillParent(true);
+
+        //Add the actors to the connection info
+        connectionWidgets.left();
+        connectionWidgets.top();
+        connectionWidgets.add(connectionText);
+    }
+
+    public Table getConnectionWidgets()
+    {
+        return connectionWidgets;
+    }
+
+    public Table getMenuWidgets()
+    {
+        return menuWidgets;
     }
 }
