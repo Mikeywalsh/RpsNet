@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.rpsnet.network.Packets;
 
 public class MainMenuActors extends Table
 {
@@ -32,7 +33,9 @@ public class MainMenuActors extends Table
     private final Label disconnectedText;
 
     private final Label welcomeText;
-    private final Label onlinePlayersText;
+    private final Label totalPlayersText;
+    private final Label ingamePlayersText;
+    private final Label waitingPlayersText;
 
     private final TextButton playButton;
     private final TextButton quitButton;
@@ -93,7 +96,9 @@ public class MainMenuActors extends Table
         logoText = new Label("Rock Paper Scissors!", bigLabelStyle);
         disconnectedText = new Label("Not connected", smallLabelStyle);
         welcomeText = new Label("Welcome, ", smallLabelStyle);
-        onlinePlayersText = new Label("Players online: -", smallLabelStyle);
+        totalPlayersText = new Label("Players online: -", smallLabelStyle);
+        ingamePlayersText = new Label("Players ingame: -", smallLabelStyle);
+        waitingPlayersText = new Label("Players queued: -", smallLabelStyle);
 
         //Create the menu widgets
         menuWidgets = new Table();
@@ -125,7 +130,11 @@ public class MainMenuActors extends Table
         connectedWidgets.top();
         connectedWidgets.add(welcomeText);
         connectedWidgets.row();
-        connectedWidgets.add(onlinePlayersText);
+        connectedWidgets.add(totalPlayersText);
+        connectedWidgets.row();
+        connectedWidgets.add(ingamePlayersText);
+        connectedWidgets.row();
+        connectedWidgets.add(waitingPlayersText);
     }
 
     public void updateWelcomeText(String val)
@@ -133,9 +142,14 @@ public class MainMenuActors extends Table
         welcomeText.setText(val);
     }
 
-    public void updateOnlinePlayerText(String val)
+    public void updatePlayerCounts(Packets.PlayerCount info)
     {
-        onlinePlayersText.setText(val);
+        if(info == null)
+            return;
+
+        totalPlayersText.setText("Players online: " + info.totalPlayerCount);
+        ingamePlayersText.setText("Players ingame: " + info.playersIngame);
+        waitingPlayersText.setText("Players queued: " + info.playersWaiting);
     }
 
     public Table getDisconnectedWidgets()

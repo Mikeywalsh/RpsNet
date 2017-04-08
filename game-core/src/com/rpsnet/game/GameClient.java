@@ -16,7 +16,7 @@ public class GameClient extends Thread
 
     private Connection serverConnection;
 
-    private int playerCount;
+    private Packets.PlayerCount playerCountInfo;
 
     public void run()
     {
@@ -59,13 +59,13 @@ public class GameClient extends Thread
         }
     }
 
-    public int getPlayerCount() { return playerCount;}
+    public Packets.PlayerCount getPlayerCountInfo() { return playerCountInfo; }
 
     public String getPlayerName(){ return name; }
 
     public void setServerConnection(Connection con) { serverConnection = con; }
 
-    public void setPlayerCount(int val) { playerCount = val; }
+    public void setPlayerCountInfo(Packets.PlayerCount info) { playerCountInfo = info; }
 
     public boolean connected()
     {

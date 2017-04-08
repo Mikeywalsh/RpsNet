@@ -35,7 +35,7 @@ public class ClientListener extends Listener
     {
         if(o instanceof Packets.PlayerCount)
         {
-            gameClient.setPlayerCount(((Packets.PlayerCount)o).count);
+            gameClient.setPlayerCountInfo((Packets.PlayerCount)o);
         }
     }
 }

@@ -38,7 +38,9 @@ public class ServerListener extends Listener
         else if(o instanceof Packets.RequestPlayerCount)
         {
             Packets.PlayerCount playerCount = new Packets.PlayerCount();
-            playerCount.count = gameServer.playerCount();
+            playerCount.totalPlayerCount = gameServer.playerCount();
+            playerCount.playersIngame = gameServer.playerCountInState(ClientState.INGAME);
+            playerCount.playersWaiting = gameServer.playerCountInState(ClientState.WAITING);
             connection.sendTCP(playerCount);
         }
     }

@@ -16,6 +16,8 @@ public class Packets
     public static class RequestPlayerCount { }
 
     public static class PlayerCount {
-        public int count;
+        public int totalPlayerCount;
+        public int playersIngame;
+        public int playersWaiting;
     }
 }
