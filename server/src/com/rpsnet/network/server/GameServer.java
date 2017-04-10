@@ -11,7 +11,14 @@ import java.util.Map;
 
 public class GameServer
 {
+    /**
+     * Kryonet server object
+     */
     Server server;
+
+    /**
+     * Seperate thread that handles updating of server-side data
+     */
     UpdateThread updateThread;
 
     /**
