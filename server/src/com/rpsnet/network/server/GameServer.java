@@ -13,6 +13,7 @@ import java.util.Map;
 public class GameServer
 {
     Server server;
+    UpdateThread updateThread;
 
     private Map<Connection, RemoteClient> remoteClients;
 
@@ -33,6 +34,10 @@ public class GameServer
 
         //Initialise remoteClients
         remoteClients = new HashMap<>();
+
+        //Start update thread
+        updateThread = new UpdateThread();
+        updateThread.start();
     }
 
     public void addClient(Connection connection)

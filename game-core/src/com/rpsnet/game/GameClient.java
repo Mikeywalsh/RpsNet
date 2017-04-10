@@ -39,7 +39,7 @@ public class GameClient extends Thread
         //Attempt to connect to the server
         try
         {
-            client.connect(5000, "127.0.0.1", NetworkHandler.port);
+            client.connect(5000, "192.168.1.79", NetworkHandler.port);
         }
         catch (IOException ex)
         {
