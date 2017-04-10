@@ -2,6 +2,7 @@ package com.rpsnet.network.server;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.minlog.Log;
+import com.rpsnet.network.*;
 
 public class RemoteClient
 {

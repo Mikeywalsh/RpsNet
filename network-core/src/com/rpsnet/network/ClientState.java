@@ -1,4 +1,4 @@
-package com.rpsnet.network.server;
+package com.rpsnet.network;
 
 public enum ClientState
 {

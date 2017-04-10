@@ -72,7 +72,6 @@ public class MainMenuScreen implements Screen
                 gameClient.requestPlayerCount();
                 mainMenuActors.updateWelcomeText("Welcome, " + gameClient.getPlayerName());
                 mainMenuActors.updatePlayerCounts(gameClient.getPlayerCountInfo());
-                //System.out.println("Updated player count!");
             }
         }
     }

@@ -3,8 +3,7 @@ package com.rpsnet.network.server;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 import com.esotericsoftware.minlog.Log;
-import com.rpsnet.network.NetworkHandler;
-import com.rpsnet.network.Packets;
+import com.rpsnet.network.*;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,7 +13,15 @@ public class GameServer
 {
     Server server;
 
+    /**
+     * Contains a list of active connections and their respective client objects
+     */
     private Map<Connection, RemoteClient> remoteClients;
+
+    /**
+     * Contains the amount of players in each game state, so that it does not have to be recalculated for every request
+     */
+    private Map<ClientState, Integer> playerCount;
 
     public GameServer() throws IOException {
         //Create the server object
@@ -31,8 +38,10 @@ public class GameServer
         //Start running the server
         server.start();
 
-        //Initialise remoteClients
+        //Initialise remoteClients and state count
         remoteClients = new HashMap<>();
+        playerCount = new HashMap<>();
+        refreshPlayerCount();
     }
 
     public void addClient(Connection connection)
@@ -72,27 +81,28 @@ public class GameServer
         }
     }
 
-    public int playerCount()
+    public Map<ClientState, Integer> getPlayerCount()
     {
-        return remoteClients.size();
+        return playerCount;
     }
 
-    public int playerCountInState(ClientState state)
+    public void refreshPlayerCount()
     {
-        int count = 0;
+        Map<ClientState, Integer> newPlayerCount = new HashMap<>();
 
-        for (RemoteClient r : remoteClients.values())
+        //Set the value for each state to be zero
+        for(ClientState state : ClientState.values())
         {
-            if(r.getClientState() == state)
-            {
-                count++;
-            }
+            newPlayerCount.put(state, 0);
         }
 
-        return count;
-    }
+        //Now get the amount of players in each state
+        for (RemoteClient r : remoteClients.values())
+        {
+            newPlayerCount.put(r.getClientState(), newPlayerCount.get(r.getClientState()) + 1);
+        }
 
-    public static void main(String[] args) throws IOException {
-        new GameServer();
+        //Now assign the new count map to the old count map
+        playerCount = newPlayerCount;
     }
 }

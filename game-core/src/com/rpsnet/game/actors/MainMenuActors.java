@@ -4,15 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.rpsnet.network.ClientState;
 import com.rpsnet.network.Packets;
 
 public class MainMenuActors extends Table
@@ -147,9 +145,9 @@ public class MainMenuActors extends Table
         if(info == null)
             return;
 
-        totalPlayersText.setText("Players online: " + info.totalPlayerCount);
-        ingamePlayersText.setText("Players ingame: " + info.playersIngame);
-        waitingPlayersText.setText("Players queued: " + info.playersWaiting);
+        totalPlayersText.setText("Players online: " + info.totalPlayerCount());
+        ingamePlayersText.setText("Players ingame: " + info.playerCount.get(ClientState.INGAME));
+        waitingPlayersText.setText("Players queued: " + info.playerCount.get(ClientState.WAITING));
     }
 
     public Table getDisconnectedWidgets()

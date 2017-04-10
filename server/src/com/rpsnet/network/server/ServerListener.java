@@ -3,7 +3,7 @@ package com.rpsnet.network.server;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.minlog.Log;
-import com.rpsnet.network.Packets;
+import com.rpsnet.network.*;
 
 public class ServerListener extends Listener
 {
@@ -38,9 +38,7 @@ public class ServerListener extends Listener
         else if(o instanceof Packets.RequestPlayerCount)
         {
             Packets.PlayerCount playerCount = new Packets.PlayerCount();
-            playerCount.totalPlayerCount = gameServer.playerCount();
-            playerCount.playersIngame = gameServer.playerCountInState(ClientState.INGAME);
-            playerCount.playersWaiting = gameServer.playerCountInState(ClientState.WAITING);
+            playerCount.playerCount = gameServer.getPlayerCount();
             connection.sendTCP(playerCount);
         }
     }
