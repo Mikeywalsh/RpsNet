@@ -12,6 +12,7 @@ import java.util.Map;
 public class GameServer
 {
     Server server;
+    UpdateThread updateThread;
 
     /**
      * Contains a list of active connections and their respective client objects
@@ -42,6 +43,10 @@ public class GameServer
         remoteClients = new HashMap<>();
         playerCount = new HashMap<>();
         refreshPlayerCount();
+
+        //Start update thread
+        updateThread = new UpdateThread();
+        updateThread.start();
     }
 
     public void addClient(Connection connection)
