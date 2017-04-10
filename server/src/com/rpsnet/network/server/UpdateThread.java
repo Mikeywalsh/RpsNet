@@ -1,10 +1,9 @@
 package com.rpsnet.network.server;
 
-/**
- * Created by micha on 09/04/2017.
- */
 public class UpdateThread extends Thread
 {
+    public GameServer gameServer;
+
     @Override
     public void run()
     {
@@ -14,7 +13,8 @@ public class UpdateThread extends Thread
 
             try
             {
-                sleep(1000);
+                gameServer.refreshPlayerCount();
+                sleep(3000);
             }
             catch (Exception e)
             {

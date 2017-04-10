@@ -41,6 +41,7 @@ public class MainMenuActors extends Table
     private final Table disconnectedWidgets;
     private final Table connectedWidgets;
     private final Table menuWidgets;
+    private final Table matchmakingWidgets;
 
     public MainMenuActors()
     {
@@ -102,7 +103,7 @@ public class MainMenuActors extends Table
         menuWidgets = new Table();
         menuWidgets.setFillParent(true);
 
-        //Add the actors to the menu
+        //Add the actors to the menu widgets
         menuWidgets.add(logoText).padBottom(25);
         menuWidgets.row();
         menuWidgets.add(playButton).padBottom(5);
@@ -133,6 +134,13 @@ public class MainMenuActors extends Table
         connectedWidgets.add(ingamePlayersText);
         connectedWidgets.row();
         connectedWidgets.add(waitingPlayersText);
+
+        //Create the matchmaking widgets
+        matchmakingWidgets = new Table();
+        matchmakingWidgets.setFillParent(true);
+        matchmakingWidgets.setVisible(false);
+
+        //Add the actors to the connected widget
     }
 
     public void updateWelcomeText(String val)
@@ -160,5 +168,10 @@ public class MainMenuActors extends Table
     public Table getMenuWidgets()
     {
         return menuWidgets;
+    }
+
+    public void dispose()
+    {
+        uiAtlas.dispose();
     }
 }

@@ -53,6 +53,7 @@ public class GameServer
 
         //Start update thread
         updateThread = new UpdateThread();
+        updateThread.gameServer = this;
         updateThread.start();
     }
 
