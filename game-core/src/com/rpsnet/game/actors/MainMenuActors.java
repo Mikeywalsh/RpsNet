@@ -1,19 +1,25 @@
 package com.rpsnet.game.actors;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.Scaling;
+import com.rpsnet.game.AnimatedTexture;
 import com.rpsnet.network.ClientState;
 import com.rpsnet.network.Packets;
 
-public class MainMenuActors extends Table
+public class MainMenuActors extends Table implements Disposable
 {
     private final Skin skin;
     private final TextureAtlas uiAtlas;
@@ -34,9 +40,13 @@ public class MainMenuActors extends Table
     private final Label totalPlayersText;
     private final Label ingamePlayersText;
     private final Label waitingPlayersText;
+    private final Label matchmakingText;
 
     private final TextButton playButton;
     private final TextButton quitButton;
+
+    private final AnimatedTexture loadingTexture;
+    private final AnimatedActor loadingAnimation;
 
     private final Table disconnectedWidgets;
     private final Table connectedWidgets;
@@ -98,12 +108,18 @@ public class MainMenuActors extends Table
         totalPlayersText = new Label("Players online: -", smallLabelStyle);
         ingamePlayersText = new Label("Players ingame: -", smallLabelStyle);
         waitingPlayersText = new Label("Players queued: -", smallLabelStyle);
+        matchmakingText = new Label("Finding game ", bigLabelStyle);
+
+        //Create animated textures
+        loadingTexture = new AnimatedTexture("UI/loadingSheet.png", 4, 2, 0.03f);
+        loadingAnimation = new AnimatedActor(loadingTexture);
 
         //Create the menu widgets
         menuWidgets = new Table();
         menuWidgets.setFillParent(true);
 
         //Add the actors to the menu widgets
+        menuWidgets.setVisible(false);
         menuWidgets.add(logoText).padBottom(25);
         menuWidgets.row();
         menuWidgets.add(playButton).padBottom(5);
@@ -138,9 +154,11 @@ public class MainMenuActors extends Table
         //Create the matchmaking widgets
         matchmakingWidgets = new Table();
         matchmakingWidgets.setFillParent(true);
-        matchmakingWidgets.setVisible(false);
+        //matchmakingWidgets.setVisible(false);
 
         //Add the actors to the connected widget
+        matchmakingWidgets.add(matchmakingText);
+        matchmakingWidgets.add(loadingAnimation).padRight(100);
     }
 
     public void updateWelcomeText(String val)
@@ -170,8 +188,12 @@ public class MainMenuActors extends Table
         return menuWidgets;
     }
 
+    public Table getMatchmakingWidgets() { return matchmakingWidgets; }
+
+    @Override
     public void dispose()
     {
         uiAtlas.dispose();
+        loadingTexture.dispose();
     }
 }

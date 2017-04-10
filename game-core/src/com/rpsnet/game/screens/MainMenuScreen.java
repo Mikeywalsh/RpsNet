@@ -39,6 +39,7 @@ public class MainMenuScreen implements Screen
         stage.addActor(mainMenuActors.getDisconnectedWidgets());
         stage.addActor(mainMenuActors.getConnectedWidgets());
         stage.addActor(mainMenuActors.getMenuWidgets());
+        stage.addActor(mainMenuActors.getMatchmakingWidgets());
 
         batch = new SpriteBatch();
         backgroundImg = new Texture("background.jpg");
@@ -57,6 +58,7 @@ public class MainMenuScreen implements Screen
         batch.draw(backgroundImg,0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         batch.end();
 
+        stage.act();
         stage.draw();
 
         //Update information that depends on the server connection

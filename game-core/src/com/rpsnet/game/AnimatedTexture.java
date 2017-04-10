@@ -15,6 +15,9 @@ public class AnimatedTexture implements Disposable
     private Texture spriteSheet;
     private float stateTime;
 
+    private TextureRegion[][] tempFrames;
+    private TextureRegion[] frames;
+
     public AnimatedTexture(String path, int colCount, int rowCount, float frameInterval)
     {
         //Assign column and row values
@@ -25,10 +28,10 @@ public class AnimatedTexture implements Disposable
         spriteSheet = new Texture(Gdx.files.internal(path));
 
         //Split the sheet into a 2D array of textures for animation
-        TextureRegion[][] tempFrames = TextureRegion.split(spriteSheet, spriteSheet.getWidth() / columns, spriteSheet.getHeight() / columns);
+         tempFrames = TextureRegion.split(spriteSheet, spriteSheet.getWidth() / columns, spriteSheet.getHeight() / rows);
 
         //Place the regions into a 1D array in order
-        TextureRegion[] frames = new TextureRegion[columns * rows];
+        frames = new TextureRegion[columns * rows];
         int index = 0;
         for(int y = 0; y < rows; y++)
         {
@@ -50,7 +53,7 @@ public class AnimatedTexture implements Disposable
         stateTime += delta;
     }
 
-    public TextureRegion getCurrentFrames()
+    public TextureRegion getCurrentFrame()
     {
         return animation.getKeyFrame(stateTime, true);
     }
