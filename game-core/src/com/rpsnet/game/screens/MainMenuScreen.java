@@ -35,7 +35,7 @@ public class MainMenuScreen implements Screen
         Gdx.input.setInputProcessor(stage);
 
         //Setup the actors
-        mainMenuActors = new MainMenuActors();
+        mainMenuActors = new MainMenuActors(this);
         stage.addActor(mainMenuActors.getDisconnectedWidgets());
         stage.addActor(mainMenuActors.getConnectedWidgets());
         stage.addActor(mainMenuActors.getMenuWidgets());
@@ -74,8 +74,14 @@ public class MainMenuScreen implements Screen
                 gameClient.requestPlayerCount();
                 mainMenuActors.updateWelcomeText("Welcome, " + gameClient.getPlayerName());
                 mainMenuActors.updatePlayerCounts(gameClient.getPlayerCountInfo());
+                mainMenuActors.enablePlayButton();
             }
         }
+    }
+
+    public void playButtonPressed()
+    {
+
     }
 
     @Override

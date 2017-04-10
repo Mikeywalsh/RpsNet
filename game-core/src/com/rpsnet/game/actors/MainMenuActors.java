@@ -1,26 +1,24 @@
 package com.rpsnet.game.actors;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.Scaling;
 import com.rpsnet.game.AnimatedTexture;
+import com.rpsnet.game.screens.MainMenuScreen;
 import com.rpsnet.network.ClientState;
 import com.rpsnet.network.Packets;
 
 public class MainMenuActors extends Table implements Disposable
 {
+    private final MainMenuScreen mainMenuScreen;
+
     private final Skin skin;
     private final TextureAtlas uiAtlas;
     private final BitmapFont smallFont;
@@ -53,8 +51,11 @@ public class MainMenuActors extends Table implements Disposable
     private final Table menuWidgets;
     private final Table matchmakingWidgets;
 
-    public MainMenuActors()
+    public MainMenuActors(MainMenuScreen menuScreen)
     {
+        //Assign the main menu screen to its variable
+        mainMenuScreen = menuScreen;
+
         //Create a freetype generator and parameter for text generation
         generator = new FreeTypeFontGenerator(Gdx.files.internal("gameFont.ttf"));
         parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -76,15 +77,20 @@ public class MainMenuActors extends Table implements Disposable
         textButtonStyle.font = bigFont;
         textButtonStyle.up = skin.getDrawable("greenButtonUp");
         textButtonStyle.down = skin.getDrawable("greenButtonDown");
+        textButtonStyle.over = skin.getDrawable("greenButtonOver");
+        textButtonStyle.disabled = skin.getDrawable("greenButtonDisabled");
 
         //Create Play button
         playButton = new TextButton("Play", textButtonStyle);
         playButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("PLAY BUTTON PRESSED " + x + " " + y);
+                menuWidgets.setVisible(false);
+                matchmakingWidgets.setVisible(true);
+                mainMenuScreen.playButtonPressed();
             }
         });
+        disablePlayButton();
 
         //Create Quit button
         quitButton = new TextButton("Quit", textButtonStyle);
@@ -119,7 +125,6 @@ public class MainMenuActors extends Table implements Disposable
         menuWidgets.setFillParent(true);
 
         //Add the actors to the menu widgets
-        menuWidgets.setVisible(false);
         menuWidgets.add(logoText).padBottom(25);
         menuWidgets.row();
         menuWidgets.add(playButton).padBottom(5);
@@ -154,7 +159,7 @@ public class MainMenuActors extends Table implements Disposable
         //Create the matchmaking widgets
         matchmakingWidgets = new Table();
         matchmakingWidgets.setFillParent(true);
-        //matchmakingWidgets.setVisible(false);
+        matchmakingWidgets.setVisible(false);
 
         //Add the actors to the connected widget
         matchmakingWidgets.add(matchmakingText);
@@ -174,6 +179,18 @@ public class MainMenuActors extends Table implements Disposable
         totalPlayersText.setText("Players online: " + info.totalPlayerCount());
         ingamePlayersText.setText("Players ingame: " + info.playerCount.get(ClientState.INGAME));
         waitingPlayersText.setText("Players queued: " + info.playerCount.get(ClientState.WAITING));
+    }
+
+    public void enablePlayButton()
+    {
+        playButton.setTouchable(Touchable.enabled);
+        playButton.setDisabled(false);
+    }
+
+    public void disablePlayButton()
+    {
+        playButton.setTouchable(Touchable.disabled);
+        playButton.setDisabled(true);
     }
 
     public Table getDisconnectedWidgets()

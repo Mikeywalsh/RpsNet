@@ -1,19 +1,33 @@
 
 buttons.png
-size: 512,64
+size: 1024,64
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
+greenButtonDisabled
+  rotate: false
+  xy: 2, 2
+  size: 190, 49
+  orig: 190, 49
+  offset: 0, 0
+  index: -1
 greenButtonDown
   rotate: false
-  xy: 194, 6
+  xy: 578, 6
   size: 190, 45
   orig: 190, 45
   offset: 0, 0
   index: -1
+greenButtonOver
+  rotate: false
+  xy: 194, 2
+  size: 190, 49
+  orig: 190, 49
+  offset: 0, 0
+  index: -1
 greenButtonUp
   rotate: false
-  xy: 2, 2
+  xy: 386, 2
   size: 190, 49
   orig: 190, 49
   offset: 0, 0
