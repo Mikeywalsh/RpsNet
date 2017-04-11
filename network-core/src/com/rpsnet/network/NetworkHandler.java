@@ -15,6 +15,8 @@ public class NetworkHandler
         kryo.register(HashMap.class);
         kryo.register(ClientState.class);
         kryo.register(Packets.RegisterName.class);
+        kryo.register(Packets.RegisterNameResponse.class);
+        kryo.register(Packets.RegisterNameResponse.ResponseType.class);
         kryo.register(Packets.PlayerCountRequest.class);
         kryo.register(Packets.PlayerCount.class);
         kryo.register(Packets.MatchmakeRequest.class);

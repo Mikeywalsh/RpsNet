@@ -33,6 +33,7 @@ public class ServerListener extends Listener
 
         if(o instanceof Packets.RegisterName)
         {
+            String requestedName = ((Packets.RegisterName)o).name;
             gameServer.registerName(connection, ((Packets.RegisterName)o).name);
         }
         else if(o instanceof Packets.PlayerCountRequest)

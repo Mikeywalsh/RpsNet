@@ -1,6 +1,8 @@
 package com.rpsnet.network.server;
 
-public class UpdateThread extends Thread
+import static java.lang.Thread.sleep;
+
+public class UpdateThread implements Runnable
 {
     public GameServer gameServer;
 

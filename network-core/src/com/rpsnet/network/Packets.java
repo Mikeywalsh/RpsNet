@@ -12,6 +12,18 @@ public class Packets
         public String name;
     }
 
+    public static class RegisterNameResponse {
+        public String requestedName;
+        public ResponseType responseType;
+
+        public enum ResponseType {
+
+            ALREADY_HAS_NAME,
+            NAME_EXISTS,
+            ACCEPTED
+        }
+    }
+
     public static class PlayerCountRequest { }
 
     public static class PlayerCount {

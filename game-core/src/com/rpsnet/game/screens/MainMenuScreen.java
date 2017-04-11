@@ -27,9 +27,6 @@ public class MainMenuScreen implements Screen
     Texture backgroundImg;
     MainMenuActors mainMenuActors;
 
-    private final float CONNECTION_REFRESH_TIME = 5;
-    float refreshTimer = 0;
-
     public MainMenuScreen() {
         //Setup the stage
         stage = new Stage(new ScreenViewport());
@@ -46,7 +43,7 @@ public class MainMenuScreen implements Screen
         backgroundImg = new Texture("background.jpg");
 
         gameClient = new GameClient();
-        gameClient.start();
+        gameClient.setCurrentScreen(this);
 
         Gdx.gl.glClearColor(1, 0, 1, 1);
     }
@@ -61,32 +58,21 @@ public class MainMenuScreen implements Screen
 
         stage.act();
         stage.draw();
+    }
 
-        //Update information that depends on the server connection
-        refreshTimer += delta;
-        if(refreshTimer > CONNECTION_REFRESH_TIME)
+    public void updateConnectionInfo(boolean connected)
+    {
+        if (connected)
         {
-            refreshTimer -= CONNECTION_REFRESH_TIME;
-            mainMenuActors.getConnectedWidgets().setVisible(gameClient.connected());
-            mainMenuActors.getDisconnectedWidgets().setVisible(!gameClient.connected());
-
-            if(gameClient.connected())
-            {
-                gameClient.requestPlayerCount();
-                mainMenuActors.updateWelcomeText("Welcome, " + gameClient.getPlayerName());
-                mainMenuActors.updatePlayerCounts(gameClient.getPlayerCountInfo());
-                mainMenuActors.connected(true);
-            }
-            else if(!gameClient.isAttemptingConnection())
-            {
-                mainMenuActors.connected(false);
-            }
+            mainMenuActors.updateConnectionInfo(true, gameClient.getPlayerName(), gameClient.getPlayerCountInfo());
+        } else
+        {
+            mainMenuActors.updateConnectionInfo(false, null, null);
         }
     }
 
     public void connectButtonPressed(String name)
     {
-        refreshTimer = 0;
         gameClient.attemptConnection(name);
     }
 

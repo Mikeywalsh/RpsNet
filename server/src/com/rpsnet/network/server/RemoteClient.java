@@ -18,7 +18,7 @@ public class RemoteClient
 
     public Connection getConnection() { return connection; }
 
-    public String getName() { return name; }
+    public String getPlayerName() { return name; }
 
     public ClientState getClientState() { return clientState; }
 

@@ -28,7 +28,7 @@ public class ClientListener extends Listener
 
     public void disconnected(Connection connection)
     {
-
+        gameClient.updateCurrentScreen();
     }
 
     public void received(Connection connection, Object o)
@@ -36,6 +36,18 @@ public class ClientListener extends Listener
         if(o instanceof Packets.PlayerCount)
         {
             gameClient.setPlayerCountInfo((Packets.PlayerCount)o);
+        }
+        else if(o instanceof Packets.RegisterNameResponse)
+        {
+            //If the server didn't accept the name registration, then abort the connection
+            Packets.RegisterNameResponse response = (Packets.RegisterNameResponse)o;
+            System.out.println(response.requestedName);
+            System.out.print(response.responseType);
+
+            if(response.responseType != Packets.RegisterNameResponse.ResponseType.ACCEPTED)
+            {
+                gameClient.abortConnection();
+            }
         }
     }
 }

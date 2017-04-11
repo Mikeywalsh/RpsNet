@@ -214,12 +214,12 @@ public class MainMenuActors extends Table implements Disposable
         matchmakingWidgets.add(loadingAnimation).padRight(100);
     }
 
-    public void updateWelcomeText(String val)
+    private void updateWelcomeText(String val)
     {
         welcomeText.setText(val);
     }
 
-    public void updatePlayerCounts(Packets.PlayerCount info)
+    private void updatePlayerCounts(Packets.PlayerCount info)
     {
         if(info == null)
             return;
@@ -241,11 +241,13 @@ public class MainMenuActors extends Table implements Disposable
         button.setDisabled(true);
     }
 
-    public void connected(boolean isConnected)
+    public void updateConnectionInfo(boolean isConnected, String playerName, Packets.PlayerCount playerCount)
     {
         if(isConnected)
         {
             enableButton(playButton);
+            updateWelcomeText("Welcome " + playerName + "!");
+            updatePlayerCounts(playerCount);
             disconnectedWidgets.setVisible(false);
             connectedWidgets.setVisible(true);
         }

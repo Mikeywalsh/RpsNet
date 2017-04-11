@@ -1,51 +1,72 @@
 package com.rpsnet.game;
 
+import com.badlogic.gdx.Screen;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.minlog.Log;
+import com.rpsnet.game.actors.MainMenuActors;
+import com.rpsnet.game.screens.MainMenuScreen;
 import com.rpsnet.network.NetworkHandler;
 import com.rpsnet.network.Packets;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.io.IOException;
-import java.util.Scanner;
 
-public class GameClient extends Thread
+public class GameClient
 {
     private Client client;
+    private Screen currentScreen;
+
     private String name;
-    private Boolean attemptingConnection = false;
 
     private Connection serverConnection;
 
     private Packets.PlayerCount playerCountInfo;
 
-    public void attemptConnection(String inputName)
+    public GameClient()
     {
-        //Set the name of the client
-        name = inputName;
-
         //Create the client and start running it in another thread
         client = new Client();
-        new Thread(client).start();
+        client.start();
 
         //Register classes with Kryonet
         NetworkHandler.register(client);
 
         //Add the event listener to the client thread
         client.addListener(new ClientListener(this));
+    }
 
-        //Attempt to connect to the server
-        try
+    public void attemptConnection(String inputName)
+    {
+        new Thread("Connect")
         {
-            attemptingConnection = true;
-            client.connect(5000, "192.168.1.79", NetworkHandler.port);
-        }
-        catch (IOException ex)
+            public void run()
+            {
+                //Attempt to connect to the server
+                try
+                {
+                    name = inputName;
+                    client.connect(5000, "127.0.0.1", NetworkHandler.port);
+                }
+                catch (IOException ex)
+                {
+                    updateCurrentScreen();
+                    System.out.println("Could not find server...");
+                }
+            }
+        }.start();
+    }
+
+    /**
+     * Used to disconnect from the server manually
+     */
+    public void abortConnection()
+    {
+        if(client.isConnected())
         {
-            attemptingConnection = false;
-            System.out.println("Could not find server...");
+            client.stop();
         }
+
+        updateCurrentScreen();
     }
 
     public void requestPlayerCount()
@@ -72,26 +93,34 @@ public class GameClient extends Thread
         }
     }
 
-    public Boolean isAttemptingConnection()
-    {
-        return attemptingConnection;
-    }
-
     public Packets.PlayerCount getPlayerCountInfo() { return playerCountInfo; }
 
     public String getPlayerName(){ return name; }
 
-    public void setServerConnection(Connection con) { serverConnection = con; }
-
-    public void setPlayerCountInfo(Packets.PlayerCount info) { playerCountInfo = info; }
-
-    public boolean connected()
+    public void setCurrentScreen(Screen screen)
     {
-        if(client == null)
-        {
-            return false;
-        }
+        currentScreen = screen;
+    }
 
-        return client.isConnected();
+    public void setServerConnection(Connection con)
+    {
+        serverConnection = con;
+        updateCurrentScreen();
+    }
+
+    public void setPlayerCountInfo(Packets.PlayerCount info)
+    {
+        playerCountInfo = info;
+        updateCurrentScreen();
+    }
+
+    public void updateCurrentScreen()
+    {
+        Boolean connected = client.isConnected();
+
+        if(currentScreen instanceof MainMenuScreen)
+        {
+            ((MainMenuScreen)currentScreen).updateConnectionInfo(connected);
+        }
     }
 }

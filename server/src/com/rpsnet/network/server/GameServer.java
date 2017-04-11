@@ -54,7 +54,7 @@ public class GameServer
         //Start update thread
         updateThread = new UpdateThread();
         updateThread.gameServer = this;
-        updateThread.start();
+        updateThread.run();
     }
 
     public void addClient(Connection connection)
@@ -85,7 +85,39 @@ public class GameServer
     {
         if(remoteClients.containsKey(connection))
         {
-            remoteClients.get(connection).setName(name);
+            //Set the initial value of the response to be accepted
+            Packets.RegisterNameResponse.ResponseType responseType = Packets.RegisterNameResponse.ResponseType.ACCEPTED;
+
+            //Check if the client already has a name
+            if(remoteClients.get(connection).getClientState() != ClientState.NAMELESS)
+            {
+                responseType = Packets.RegisterNameResponse.ResponseType.ALREADY_HAS_NAME;
+            }
+            else
+            {
+                //Check if the requested name exists in the list of remote clients
+                for (RemoteClient client : remoteClients.values())
+                {
+                    if (client.getPlayerName() == name)
+                    {
+                        responseType = Packets.RegisterNameResponse.ResponseType.NAME_EXISTS;
+                    }
+                }
+            }
+
+            //If the response is still accepted, then set the clients name
+            if(responseType == Packets.RegisterNameResponse.ResponseType.ACCEPTED)
+            {
+                remoteClients.get(connection).setName(name);
+            }
+
+            //Create a response for the client
+            Packets.RegisterNameResponse response = new Packets.RegisterNameResponse();
+            response.requestedName = name;
+            response.responseType = responseType;
+
+            //Now send the response to the client
+            connection.sendTCP(response);
             Log.info("Client " + connection.getID() + " has registered name: " + name);
         }
         else
@@ -102,11 +134,11 @@ public class GameServer
             if(client.getClientState() == ClientState.IDLE)
             {
                 client.setClientState(ClientState.QUEUED);
-                Log.info(remoteClients.get(connection).getName() + " has queued for matchmaking!");
+                Log.info(remoteClients.get(connection).getPlayerName() + " has queued for matchmaking!");
             }
             else
             {
-                Log.error("Tried to set state to QUEUED for client " + client.getName() + " with state: " + client.getClientState());
+                Log.error("Tried to set state to QUEUED for client " + client.getPlayerName() + " with state: " + client.getClientState());
             }
         }
         else
