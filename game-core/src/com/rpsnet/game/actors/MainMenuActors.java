@@ -16,6 +16,8 @@ import com.rpsnet.game.screens.MainMenuScreen;
 import com.rpsnet.network.ClientState;
 import com.rpsnet.network.Packets;
 
+import javax.xml.soap.Text;
+
 public class MainMenuActors extends Table implements Disposable
 {
     private final MainMenuScreen mainMenuScreen;
@@ -101,7 +103,8 @@ public class MainMenuActors extends Table implements Disposable
         connectButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Connect button clicked!");
+                disableButton(connectButton);
+                mainMenuScreen.connectButtonPressed(nameInput.getText());
             }
         });
 
@@ -115,7 +118,7 @@ public class MainMenuActors extends Table implements Disposable
                 mainMenuScreen.playButtonPressed();
             }
         });
-        disablePlayButton();
+        disableButton(playButton);
 
         //Create Quit button
         quitButton = new TextButton("Quit", largeButtonStyle);
@@ -226,16 +229,33 @@ public class MainMenuActors extends Table implements Disposable
         waitingPlayersText.setText("Players queued: " + info.playerCount.get(ClientState.QUEUED));
     }
 
-    public void enablePlayButton()
+    public void enableButton(TextButton button)
     {
-        playButton.setTouchable(Touchable.enabled);
-        playButton.setDisabled(false);
+        button.setTouchable(Touchable.enabled);
+        button.setDisabled(false);
     }
 
-    public void disablePlayButton()
+    public void disableButton(TextButton button)
     {
-        playButton.setTouchable(Touchable.disabled);
-        playButton.setDisabled(true);
+        button.setTouchable(Touchable.disabled);
+        button.setDisabled(true);
+    }
+
+    public void connected(boolean isConnected)
+    {
+        if(isConnected)
+        {
+            enableButton(playButton);
+            disconnectedWidgets.setVisible(false);
+            connectedWidgets.setVisible(true);
+        }
+        else
+        {
+            disableButton(playButton);
+            enableButton(connectButton);
+            disconnectedWidgets.setVisible(true);
+            connectedWidgets.setVisible(false);
+        }
     }
 
     public Table getDisconnectedWidgets()

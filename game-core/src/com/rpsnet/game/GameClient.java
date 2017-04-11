@@ -5,6 +5,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.minlog.Log;
 import com.rpsnet.network.NetworkHandler;
 import com.rpsnet.network.Packets;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -12,19 +13,17 @@ import java.util.Scanner;
 public class GameClient extends Thread
 {
     private Client client;
-    String name;
+    private String name;
+    private Boolean attemptingConnection = false;
 
     private Connection serverConnection;
 
     private Packets.PlayerCount playerCountInfo;
 
-    public void run()
+    public void attemptConnection(String inputName)
     {
-        //Prompt the user for their name before connecting them
-        System.out.println("Please enter your name...");
-        Scanner scanner = new Scanner(System.in);
-        name = scanner.nextLine();
-        System.out.println("Hello " + name + "! Connecting to server...\n");
+        //Set the name of the client
+        name = inputName;
 
         //Create the client and start running it in another thread
         client = new Client();
@@ -39,10 +38,12 @@ public class GameClient extends Thread
         //Attempt to connect to the server
         try
         {
+            attemptingConnection = true;
             client.connect(5000, "192.168.1.79", NetworkHandler.port);
         }
         catch (IOException ex)
         {
+            attemptingConnection = false;
             System.out.println("Could not find server...");
         }
     }
@@ -69,6 +70,11 @@ public class GameClient extends Thread
         {
             Log.error("Tried to contact server when there was no server connection!");
         }
+    }
+
+    public Boolean isAttemptingConnection()
+    {
+        return attemptingConnection;
     }
 
     public Packets.PlayerCount getPlayerCountInfo() { return playerCountInfo; }

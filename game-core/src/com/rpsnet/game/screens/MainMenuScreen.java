@@ -75,9 +75,19 @@ public class MainMenuScreen implements Screen
                 gameClient.requestPlayerCount();
                 mainMenuActors.updateWelcomeText("Welcome, " + gameClient.getPlayerName());
                 mainMenuActors.updatePlayerCounts(gameClient.getPlayerCountInfo());
-                mainMenuActors.enablePlayButton();
+                mainMenuActors.connected(true);
+            }
+            else if(!gameClient.isAttemptingConnection())
+            {
+                mainMenuActors.connected(false);
             }
         }
+    }
+
+    public void connectButtonPressed(String name)
+    {
+        refreshTimer = 0;
+        gameClient.attemptConnection(name);
     }
 
     public void playButtonPressed()
