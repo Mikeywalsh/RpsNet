@@ -41,7 +41,9 @@ public class MainMenuActors extends Table implements Disposable
     private final Label ingamePlayersText;
     private final Label waitingPlayersText;
     private final Label matchmakingText;
+    private final Label nameRequestText;
 
+    private final TextButton connectButton;
     private final TextButton playButton;
     private final TextButton quitButton;
 
@@ -88,6 +90,17 @@ public class MainMenuActors extends Table implements Disposable
         textButtonStyle.over = skin.getDrawable("greenButtonOver");
         textButtonStyle.disabled = skin.getDrawable("greenButtonDisabled");
 
+        //Create Connect button
+        connectButton = new TextButton("Connect", textButtonStyle);
+        connectButton.setScale(.5f);
+        //connectButton
+        connectButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("Connect button clicked!");
+            }
+        });
+
         //Create Play button
         playButton = new TextButton("Play", textButtonStyle);
         playButton.addListener( new ClickListener() {
@@ -118,6 +131,7 @@ public class MainMenuActors extends Table implements Disposable
         //Create Labels
         logoText = new Label("Rock Paper Scissors!", bigLabelStyle);
         disconnectedText = new Label("Not connected", smallLabelStyle);
+        nameRequestText = new Label("Enter Name: ", smallLabelStyle);
         welcomeText = new Label("Welcome, ", smallLabelStyle);
         totalPlayersText = new Label("Players online: -", smallLabelStyle);
         ingamePlayersText = new Label("Players ingame: -", smallLabelStyle);
@@ -134,9 +148,9 @@ public class MainMenuActors extends Table implements Disposable
         textFieldStyle.fontColor = Color.WHITE;
         textFieldStyle.selection = skin.getDrawable("inputSelection");
 
-        //Create inputs
+        //Create input fields
         nameInput = new TextField("Player", textFieldStyle);
-
+        nameInput.setMaxLength(12);
 
         //Create animated textures
         loadingTexture = new AnimatedTexture("UI/loadingSheet.png", 4, 2, 0.03f);
@@ -160,9 +174,14 @@ public class MainMenuActors extends Table implements Disposable
         //Add the actors to the disconnected widget
         disconnectedWidgets.left();
         disconnectedWidgets.top();
-        disconnectedWidgets.add(disconnectedText);
+        disconnectedWidgets.add(disconnectedText).left();
         disconnectedWidgets.row();
+        disconnectedWidgets.add(nameRequestText).left();
         disconnectedWidgets.add(nameInput).padRight(10);
+        disconnectedWidgets.row();
+        disconnectedWidgets.add(connectButton);
+
+        disconnectedWidgets.setDebug(true);
 
         //Create the connected widgets
         connectedWidgets = new Table();
@@ -172,13 +191,13 @@ public class MainMenuActors extends Table implements Disposable
         //Add the actors to the connected widget
         connectedWidgets.left();
         connectedWidgets.top();
-        connectedWidgets.add(welcomeText);
+        connectedWidgets.add(welcomeText).left();
         connectedWidgets.row();
-        connectedWidgets.add(totalPlayersText);
+        connectedWidgets.add(totalPlayersText).left();
         connectedWidgets.row();
-        connectedWidgets.add(ingamePlayersText);
+        connectedWidgets.add(ingamePlayersText).left();
         connectedWidgets.row();
-        connectedWidgets.add(waitingPlayersText);
+        connectedWidgets.add(waitingPlayersText).left();
 
         //Create the matchmaking widgets
         matchmakingWidgets = new Table();
