@@ -13,16 +13,7 @@ greenButtonDisabled
   orig: 190, 49
   offset: 0, 0
   index: -1
-greenButtonDown
-  rotate: false
-  xy: 578, 2
-  size: 95, 23
-  split: 8, 8, 8, 8
-  pad: 0, 0, 0, 0
-  orig: 95, 23
-  offset: 0, 0
-  index: -1
-greenButtonOver
+greenButtonUp
   rotate: false
   xy: 194, 2
   size: 190, 49
@@ -31,7 +22,16 @@ greenButtonOver
   orig: 190, 49
   offset: 0, 0
   index: -1
-greenButtonUp
+greenbuttondown
+  rotate: false
+  xy: 578, 2
+  size: 95, 23
+  split: 8, 8, 8, 8
+  pad: 0, 0, 0, 0
+  orig: 95, 23
+  offset: 0, 0
+  index: -1
+greenbuttonover
   rotate: false
   xy: 386, 2
   size: 190, 49
