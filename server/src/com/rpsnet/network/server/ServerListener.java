@@ -35,11 +35,15 @@ public class ServerListener extends Listener
         {
             gameServer.registerName(connection, ((Packets.RegisterName)o).name);
         }
-        else if(o instanceof Packets.RequestPlayerCount)
+        else if(o instanceof Packets.PlayerCountRequest)
         {
             Packets.PlayerCount playerCount = new Packets.PlayerCount();
             playerCount.playerCount = gameServer.getPlayerCount();
             connection.sendTCP(playerCount);
+        }
+        else if(o instanceof Packets.MatchmakeRequest)
+        {
+            gameServer.queueClientMatchmaking(connection);
         }
     }
 }

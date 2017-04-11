@@ -27,11 +27,17 @@ public class RemoteClient
         if(clientState == ClientState.NAMELESS)
         {
             name = val;
-            clientState = ClientState.READY;
+            clientState = ClientState.IDLE;
         }
         else
         {
             Log.error("Tried to set a name for a nameless client!");
         }
     }
+
+    public void setClientState(ClientState state)
+    {
+        clientState = state;
+    }
+
 }

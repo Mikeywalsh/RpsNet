@@ -1,5 +1,5 @@
 
-buttons.png
+uiElements.png
 size: 1024,64
 format: RGBA8888
 filter: Nearest,Nearest
@@ -30,5 +30,19 @@ greenButtonUp
   xy: 386, 2
   size: 190, 49
   orig: 190, 49
+  offset: 0, 0
+  index: -1
+inputCursor
+  rotate: false
+  xy: 900, 35
+  size: 4, 16
+  orig: 4, 16
+  offset: 0, 0
+  index: -1
+textFieldBackground
+  rotate: false
+  xy: 770, 19
+  size: 128, 32
+  orig: 128, 32
   offset: 0, 0
   index: -1

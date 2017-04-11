@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class GameClient extends Thread
 {
-    Client client;
+    private Client client;
     String name;
 
     private Connection serverConnection;
@@ -51,11 +51,23 @@ public class GameClient extends Thread
     {
         if(serverConnection != null)
         {
-            serverConnection.sendTCP(new Packets.RequestPlayerCount());
+            serverConnection.sendTCP(new Packets.PlayerCountRequest());
         }
         else
         {
-            Log.error("Tried to request player count when there was no server connection!");
+            Log.error("Tried to contact server when there was no server connection!");
+        }
+    }
+
+    public void requestMatchmake()
+    {
+        if(serverConnection != null)
+        {
+            serverConnection.sendTCP(new Packets.MatchmakeRequest());
+        }
+        else
+        {
+            Log.error("Tried to contact server when there was no server connection!");
         }
     }
 

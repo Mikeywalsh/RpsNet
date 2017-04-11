@@ -7,7 +7,7 @@ import com.rpsnet.game.RPSNet;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
-		TexturePacker.process("UI-Raw", "UI", "buttons");
+		TexturePacker.process("UI-Raw", "UI", "uiElements");
 
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 		new LwjglApplication(new RPSNet(), config);

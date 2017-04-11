@@ -1,14 +1,18 @@
 package com.rpsnet.game.actors;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
 import com.rpsnet.game.AnimatedTexture;
 import com.rpsnet.game.screens.MainMenuScreen;
@@ -23,13 +27,11 @@ public class MainMenuActors extends Table implements Disposable
     private final TextureAtlas uiAtlas;
     private final BitmapFont smallFont;
     private final BitmapFont bigFont;
+    private final BitmapFont inputFont;
 
     private final TextButton.TextButtonStyle textButtonStyle;
     private final Label.LabelStyle smallLabelStyle;
     private final Label.LabelStyle bigLabelStyle;
-
-    private final FreeTypeFontGenerator generator;
-    private final FreeTypeFontGenerator.FreeTypeFontParameter parameter;
 
     private final Label logoText;
     private final Label disconnectedText;
@@ -51,25 +53,31 @@ public class MainMenuActors extends Table implements Disposable
     private final Table menuWidgets;
     private final Table matchmakingWidgets;
 
+    private final TextField.TextFieldStyle textFieldStyle;
+    private final TextField nameInput;
+
     public MainMenuActors(MainMenuScreen menuScreen)
     {
         //Assign the main menu screen to its variable
         mainMenuScreen = menuScreen;
 
         //Create a freetype generator and parameter for text generation
-        generator = new FreeTypeFontGenerator(Gdx.files.internal("gameFont.ttf"));
-        parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        FreeTypeFontGenerator mainFontGen = new FreeTypeFontGenerator(Gdx.files.internal("UI/gameFont.ttf"));
+        FreeTypeFontGenerator inputFontGen = new FreeTypeFontGenerator(Gdx.files.internal("UI/inputFont.ttf"));
+        FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 
-        //Create a bitmapfont from the freetype font generator and then dispose the generator
-        parameter.size = 24;
-        bigFont = generator.generateFont(parameter);
-        parameter.size = 16;
-        smallFont = generator.generateFont(parameter);
-        generator.dispose();
+        //Create bitmap fonts from the generators and parameter
+        fontParameter.size = 24;
+        bigFont = mainFontGen.generateFont(fontParameter);
+        fontParameter.size = 16;
+        smallFont = mainFontGen.generateFont(fontParameter);
+        inputFont = inputFontGen.generateFont(fontParameter);
+        mainFontGen.dispose();
+        inputFontGen.dispose();
 
         //Create a skin from the UI Atlas file
         skin = new Skin();
-        uiAtlas = new TextureAtlas(Gdx.files.internal("UI/buttons.atlas"));
+        uiAtlas = new TextureAtlas(Gdx.files.internal("UI/uiElements.atlas"));
         skin.addRegions(uiAtlas);
 
         //Create button style
@@ -116,6 +124,16 @@ public class MainMenuActors extends Table implements Disposable
         waitingPlayersText = new Label("Players queued: -", smallLabelStyle);
         matchmakingText = new Label("Finding game ", bigLabelStyle);
 
+        //Create input field styles
+        textFieldStyle = new TextField.TextFieldStyle();
+        textFieldStyle.font = inputFont;
+        textFieldStyle.cursor = skin.getDrawable("inputCursor");
+        textFieldStyle.background = skin.getDrawable("textFieldBackground");
+        textFieldStyle.fontColor = Color.WHITE;
+
+        //Create inputs
+        nameInput = new TextField("Player", textFieldStyle);
+
         //Create animated textures
         loadingTexture = new AnimatedTexture("UI/loadingSheet.png", 4, 2, 0.03f);
         loadingAnimation = new AnimatedActor(loadingTexture);
@@ -139,6 +157,8 @@ public class MainMenuActors extends Table implements Disposable
         disconnectedWidgets.left();
         disconnectedWidgets.top();
         disconnectedWidgets.add(disconnectedText);
+        disconnectedWidgets.row();
+        disconnectedWidgets.add(nameInput).padRight(10);
 
         //Create the connected widgets
         connectedWidgets = new Table();
@@ -178,7 +198,7 @@ public class MainMenuActors extends Table implements Disposable
 
         totalPlayersText.setText("Players online: " + info.totalPlayerCount());
         ingamePlayersText.setText("Players ingame: " + info.playerCount.get(ClientState.INGAME));
-        waitingPlayersText.setText("Players queued: " + info.playerCount.get(ClientState.WAITING));
+        waitingPlayersText.setText("Players queued: " + info.playerCount.get(ClientState.QUEUED));
     }
 
     public void enablePlayButton()

@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.rpsnet.game.GameClient;
 import com.rpsnet.game.actors.MainMenuActors;
+import com.rpsnet.network.Packets;
 
 public class MainMenuScreen implements Screen
 {
@@ -81,7 +82,7 @@ public class MainMenuScreen implements Screen
 
     public void playButtonPressed()
     {
-
+        gameClient.requestMatchmake();
     }
 
     @Override

@@ -77,7 +77,7 @@ public class GameServer
         }
         else
         {
-            Log.error("Client with connection ID: " + connection.getID() + " is not in client list!");
+            Log.error("Connection with ID: " + connection.getID() + " is not in client list!");
         }
     }
 
@@ -90,7 +90,28 @@ public class GameServer
         }
         else
         {
-            Log.error("Tried to set a name for a client that does not exist! ID: " + connection.getID());
+            Log.error("A remote client with the provided connection does not exist! ID: " + connection.getID());
+        }
+    }
+
+    public void queueClientMatchmaking(Connection connection)
+    {
+        if(remoteClients.containsKey(connection))
+        {
+            RemoteClient client = remoteClients.get(connection);
+            if(client.getClientState() == ClientState.IDLE)
+            {
+                client.setClientState(ClientState.QUEUED);
+                Log.info(remoteClients.get(connection).getName() + " has queued for matchmaking!");
+            }
+            else
+            {
+                Log.error("Tried to set state to QUEUED for client " + client.getName() + " with state: " + client.getClientState());
+            }
+        }
+        else
+        {
+            Log.error("A remote client with the provided connection does not exist! ID: " + connection.getID());
         }
     }
 

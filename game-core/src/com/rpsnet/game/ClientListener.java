@@ -21,7 +21,7 @@ public class ClientListener extends Listener
         registerName.name = gameClient.name;
         connection.sendTCP(registerName);
 
-        connection.sendTCP(new Packets.RequestPlayerCount());
+        connection.sendTCP(new Packets.PlayerCountRequest());
 
         gameClient.setServerConnection(connection);
     }

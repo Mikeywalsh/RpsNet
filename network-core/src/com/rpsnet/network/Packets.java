@@ -8,15 +8,11 @@ import java.util.Map;
  */
 public class Packets
 {
-    public static class GameMessage {
-        public String message;
-    }
-
     public static class RegisterName {
         public String name;
     }
 
-    public static class RequestPlayerCount { }
+    public static class PlayerCountRequest { }
 
     public static class PlayerCount {
         public Map<ClientState, Integer> playerCount;
@@ -33,4 +29,6 @@ public class Packets
             return sum;
         }
     }
+
+    public static class MatchmakeRequest { }
 }
