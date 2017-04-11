@@ -42,9 +42,14 @@ public class ClientListener extends Listener
             //If the server didn't accept the name registration, then abort the connection
             Packets.RegisterNameResponse response = (Packets.RegisterNameResponse)o;
 
-            if(response.responseType != Packets.RegisterNameResponse.ResponseType.ACCEPTED)
+            switch (response.responseType)
             {
-                gameClient.abortConnection();
+                case ALREADY_HAS_NAME:
+                    gameClient.abortConnection("You already have a name!");
+                    break;
+                case NAME_EXISTS:
+                    gameClient.abortConnection("Name taken by another player!");
+                    break;
             }
         }
     }

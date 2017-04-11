@@ -57,6 +57,10 @@ public class GameServer
         updateThread.run();
     }
 
+    /**
+     * Adds a new client to the hashmap of clients
+     * @param connection The connection for the new client
+     */
     public void addClient(Connection connection)
     {
         if(!remoteClients.containsKey(connection))
@@ -69,6 +73,10 @@ public class GameServer
         }
     }
 
+    /**
+     * Removed a client from the hashmap of clients
+     * @param connection The connection for the client being removed
+     */
     public void removeClient(Connection connection)
     {
         if(remoteClients.containsKey(connection))
@@ -109,6 +117,7 @@ public class GameServer
             if(responseType == Packets.RegisterNameResponse.ResponseType.ACCEPTED)
             {
                 remoteClients.get(connection).setName(name);
+                Log.info("Client " + connection.getID() + " has registered name: " + name);
             }
 
             //Create a response for the client
@@ -118,7 +127,6 @@ public class GameServer
 
             //Now send the response to the client
             connection.sendTCP(response);
-            Log.info("Client " + connection.getID() + " has registered name: " + name);
         }
         else
         {

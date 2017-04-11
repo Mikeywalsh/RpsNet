@@ -19,7 +19,7 @@ import com.rpsnet.game.GameClient;
 import com.rpsnet.game.actors.MainMenuActors;
 import com.rpsnet.network.Packets;
 
-public class MainMenuScreen implements Screen
+public class MainMenuScreen implements Screen, NetScreen
 {
     GameClient gameClient;
     Stage stage;
@@ -60,6 +60,7 @@ public class MainMenuScreen implements Screen
         stage.draw();
     }
 
+    @Override
     public void updateConnectionInfo(boolean connected)
     {
         if (connected)
@@ -71,11 +72,28 @@ public class MainMenuScreen implements Screen
         }
     }
 
+    @Override
+    public void displayErrorMessage(String message)
+    {
+        mainMenuActors.displayErrorMessage(message);
+    }
+
+    /**
+     * Called when the connect button is pressed
+     * Attempts to connect to the remote server through the gameClient with the input player name
+     * @param name The input name of the player
+     */
     public void connectButtonPressed(String name)
     {
+        //Reset the error message if there is one and attempt to connect
+        displayErrorMessage("");
         gameClient.attemptConnection(name);
     }
 
+    /**
+     * Called when the play button is pressed
+     * Tells the server the client wishes to queue the player for matchmaking
+     */
     public void playButtonPressed()
     {
         gameClient.requestMatchmake();

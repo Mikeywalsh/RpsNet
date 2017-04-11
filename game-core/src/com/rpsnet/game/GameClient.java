@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.minlog.Log;
 import com.rpsnet.game.actors.MainMenuActors;
 import com.rpsnet.game.screens.MainMenuScreen;
+import com.rpsnet.game.screens.NetScreen;
 import com.rpsnet.network.NetworkHandler;
 import com.rpsnet.network.Packets;
 
@@ -14,7 +15,7 @@ import java.io.IOException;
 public class GameClient
 {
     private Client client;
-    private Screen currentScreen;
+    private NetScreen currentScreen;
 
     private String name;
 
@@ -50,7 +51,7 @@ public class GameClient
                 catch (IOException ex)
                 {
                     updateCurrentScreen();
-                    System.out.println("Could not find server...");
+                    displayErrorMessage("Could not find server...");
                 }
             }
         }.start();
@@ -58,14 +59,16 @@ public class GameClient
 
     /**
      * Used to disconnect from the server manually
+     * @param reason The reason for disconnecting
      */
-    public void abortConnection()
+    public void abortConnection(String reason)
     {
         if(client.isConnected())
         {
             client.stop();
         }
 
+        displayErrorMessage(reason);
         updateCurrentScreen();
     }
 
@@ -97,7 +100,7 @@ public class GameClient
 
     public String getPlayerName(){ return name; }
 
-    public void setCurrentScreen(Screen screen)
+    public void setCurrentScreen(NetScreen screen)
     {
         currentScreen = screen;
     }
@@ -118,9 +121,11 @@ public class GameClient
     {
         Boolean connected = client.isConnected();
 
-        if(currentScreen instanceof MainMenuScreen)
-        {
-            ((MainMenuScreen)currentScreen).updateConnectionInfo(connected);
-        }
+        currentScreen.updateConnectionInfo(connected);
+    }
+
+    public void displayErrorMessage(String message)
+    {
+        currentScreen.displayErrorMessage(message);
     }
 }

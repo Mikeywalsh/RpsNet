@@ -16,8 +16,6 @@ import com.rpsnet.game.screens.MainMenuScreen;
 import com.rpsnet.network.ClientState;
 import com.rpsnet.network.Packets;
 
-import javax.xml.soap.Text;
-
 public class MainMenuActors extends Table implements Disposable
 {
     private final MainMenuScreen mainMenuScreen;
@@ -146,6 +144,7 @@ public class MainMenuActors extends Table implements Disposable
         waitingPlayersText = new Label("Players queued: -", smallLabelStyle);
         matchmakingText = new Label("Finding game ", bigLabelStyle);
         connectionErrorText = new Label("", smallLabelStyle);
+        connectionErrorText.setColor(Color.RED);
 
         //Create input field styles
         textFieldStyle = new TextField.TextFieldStyle();
@@ -218,11 +217,19 @@ public class MainMenuActors extends Table implements Disposable
         matchmakingWidgets.add(loadingAnimation).padRight(100);
     }
 
-    private void updateWelcomeText(String val)
+    /**
+     * Updates the welcome message display
+     * @param text The new text to display
+     */
+    private void updateWelcomeText(String text)
     {
-        welcomeText.setText(val);
+        welcomeText.setText(text);
     }
 
+    /**
+     * Updates the player count display with new information
+     * @param info The new information to display
+     */
     private void updatePlayerCounts(Packets.PlayerCount info)
     {
         if(info == null)
@@ -233,18 +240,32 @@ public class MainMenuActors extends Table implements Disposable
         waitingPlayersText.setText("Players queued: " + info.playerCount.get(ClientState.QUEUED));
     }
 
+    /**
+     * Enables interaction for any passed in TextButton
+     * @param button The button to enable
+     */
     public void enableButton(TextButton button)
     {
         button.setTouchable(Touchable.enabled);
         button.setDisabled(false);
     }
 
+    /**
+     * Disables interaction for any passed in TextButton
+     * @param button The button to disable
+     */
     public void disableButton(TextButton button)
     {
         button.setTouchable(Touchable.disabled);
         button.setDisabled(true);
     }
 
+    /**
+     * Updates any actors with relevant connection information
+     * @param isConnected If the client is still connected to the server
+     * @param playerName The local players name
+     * @param playerCount Details of all active players on the server
+     */
     public void updateConnectionInfo(boolean isConnected, String playerName, Packets.PlayerCount playerCount)
     {
         if(isConnected)
@@ -264,18 +285,43 @@ public class MainMenuActors extends Table implements Disposable
         }
     }
 
+    /**
+     * Displays an error message
+     * @param message The message to display
+     */
+    public void displayErrorMessage(String message)
+    {
+        connectionErrorText.setText(message);
+    }
+
+    /**
+     * Gets the disconnectedWidgets group
+     * @return The disconnectedWidgets group
+     */
     public Table getDisconnectedWidgets()
     {
         return disconnectedWidgets;
     }
 
+    /**
+     * Gets the connectedWidgets group
+     * @return The connectedWidgets group
+     */
     public Table getConnectedWidgets() { return connectedWidgets; }
 
+    /**
+     * Gets the matchmakingWidgets group
+     * @return The matchmakingWidgets group
+     */
     public Table getMenuWidgets()
     {
         return menuWidgets;
     }
 
+    /**
+     * Gets the matchmakingWidgets group
+     * @return The matchmakingWidgets group
+     */
     public Table getMatchmakingWidgets() { return matchmakingWidgets; }
 
     @Override
