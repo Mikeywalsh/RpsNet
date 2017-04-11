@@ -36,6 +36,7 @@ public class MainMenuActors extends Table implements Disposable
 
     private final Label logoText;
     private final Label disconnectedText;
+    private final Label connectionErrorText;
 
     private final Label welcomeText;
     private final Label totalPlayersText;
@@ -144,6 +145,7 @@ public class MainMenuActors extends Table implements Disposable
         ingamePlayersText = new Label("Players ingame: -", smallLabelStyle);
         waitingPlayersText = new Label("Players queued: -", smallLabelStyle);
         matchmakingText = new Label("Finding game ", bigLabelStyle);
+        connectionErrorText = new Label("", smallLabelStyle);
 
         //Create input field styles
         textFieldStyle = new TextField.TextFieldStyle();
@@ -187,6 +189,8 @@ public class MainMenuActors extends Table implements Disposable
         disconnectedWidgets.add(nameInput).padRight(10);
         disconnectedWidgets.row();
         disconnectedWidgets.add(connectButton).colspan(2).width(100).height(30).left();
+        disconnectedWidgets.row();
+        disconnectedWidgets.add(connectionErrorText).left().colspan(2);
 
         //Create the connected widgets
         connectedWidgets = new Table();
