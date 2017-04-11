@@ -188,7 +188,7 @@ public class MainMenuActors extends Table implements Disposable
         disconnectedWidgets.add(nameRequestText).left();
         disconnectedWidgets.add(nameInput).padRight(10);
         disconnectedWidgets.row();
-        disconnectedWidgets.add(connectButton).colspan(2).width(100).height(30).left();
+        disconnectedWidgets.add(connectButton).colspan(2).width(100).height(35).left();
         disconnectedWidgets.row();
         disconnectedWidgets.add(connectionErrorText).left().colspan(2);
 
