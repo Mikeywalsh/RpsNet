@@ -35,14 +35,21 @@ greenButtonUp
 inputCursor
   rotate: false
   xy: 900, 35
+  size: 2, 16
+  orig: 2, 16
+  offset: 0, 0
+  index: -1
+inputSelection
+  rotate: false
+  xy: 770, 9
   size: 4, 16
   orig: 4, 16
   offset: 0, 0
   index: -1
 textFieldBackground
   rotate: false
-  xy: 770, 19
-  size: 128, 32
-  orig: 128, 32
+  xy: 770, 27
+  size: 128, 24
+  orig: 128, 24
   offset: 0, 0
   index: -1

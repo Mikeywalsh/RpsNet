@@ -129,10 +129,14 @@ public class MainMenuActors extends Table implements Disposable
         textFieldStyle.font = inputFont;
         textFieldStyle.cursor = skin.getDrawable("inputCursor");
         textFieldStyle.background = skin.getDrawable("textFieldBackground");
+        textFieldStyle.background.setLeftWidth(7);
+        textFieldStyle.background.setRightWidth(7);
         textFieldStyle.fontColor = Color.WHITE;
+        textFieldStyle.selection = skin.getDrawable("inputSelection");
 
         //Create inputs
         nameInput = new TextField("Player", textFieldStyle);
+
 
         //Create animated textures
         loadingTexture = new AnimatedTexture("UI/loadingSheet.png", 4, 2, 0.03f);
