@@ -29,9 +29,11 @@ public class MainMenuActors extends Table implements Disposable
     private final BitmapFont bigFont;
     private final BitmapFont inputFont;
 
-    private final TextButton.TextButtonStyle textButtonStyle;
+    private final TextButton.TextButtonStyle largeButtonStyle;
+    public final TextButton.TextButtonStyle smallButtonStyle;
     private final Label.LabelStyle smallLabelStyle;
     private final Label.LabelStyle bigLabelStyle;
+    private final TextField.TextFieldStyle textFieldStyle;
 
     private final Label logoText;
     private final Label disconnectedText;
@@ -55,7 +57,6 @@ public class MainMenuActors extends Table implements Disposable
     private final Table menuWidgets;
     private final Table matchmakingWidgets;
 
-    private final TextField.TextFieldStyle textFieldStyle;
     private final TextField nameInput;
 
     public MainMenuActors(MainMenuScreen menuScreen)
@@ -82,18 +83,24 @@ public class MainMenuActors extends Table implements Disposable
         uiAtlas = new TextureAtlas(Gdx.files.internal("UI/uiElements.atlas"));
         skin.addRegions(uiAtlas);
 
-        //Create button style
-        textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.font = bigFont;
-        textButtonStyle.up = skin.getDrawable("greenButtonUp");
-        textButtonStyle.down = skin.getDrawable("greenButtonDown");
-        textButtonStyle.over = skin.getDrawable("greenButtonOver");
-        textButtonStyle.disabled = skin.getDrawable("greenButtonDisabled");
+        //Create sarge button style
+        largeButtonStyle = new TextButton.TextButtonStyle();
+        largeButtonStyle.font = bigFont;
+        largeButtonStyle.up = skin.getDrawable("greenButtonUp");
+        largeButtonStyle.down = skin.getDrawable("greenButtonDown");
+        largeButtonStyle.over = skin.getDrawable("greenButtonOver");
+        largeButtonStyle.disabled = skin.getDrawable("greenButtonDisabled");
+
+        //Create small button style
+        smallButtonStyle = new TextButton.TextButtonStyle();
+        smallButtonStyle.font = smallFont;
+        smallButtonStyle.up = skin.getDrawable("greenButtonUp");
+        smallButtonStyle.down = skin.getDrawable("greenButtonDown");
+        smallButtonStyle.over = skin.getDrawable("greenButtonOver");
+        smallButtonStyle.disabled = skin.getDrawable("greenButtonDisabled");
 
         //Create Connect button
-        connectButton = new TextButton("Connect", textButtonStyle);
-        connectButton.setScale(.5f);
-        //connectButton
+        connectButton = new TextButton("Connect", smallButtonStyle);
         connectButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -102,7 +109,7 @@ public class MainMenuActors extends Table implements Disposable
         });
 
         //Create Play button
-        playButton = new TextButton("Play", textButtonStyle);
+        playButton = new TextButton("Play", largeButtonStyle);
         playButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -114,7 +121,7 @@ public class MainMenuActors extends Table implements Disposable
         disablePlayButton();
 
         //Create Quit button
-        quitButton = new TextButton("Quit", textButtonStyle);
+        quitButton = new TextButton("Quit", largeButtonStyle);
         quitButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -174,14 +181,12 @@ public class MainMenuActors extends Table implements Disposable
         //Add the actors to the disconnected widget
         disconnectedWidgets.left();
         disconnectedWidgets.top();
-        disconnectedWidgets.add(disconnectedText).left();
+        disconnectedWidgets.add(disconnectedText).left().colspan(2);
         disconnectedWidgets.row();
         disconnectedWidgets.add(nameRequestText).left();
         disconnectedWidgets.add(nameInput).padRight(10);
         disconnectedWidgets.row();
-        disconnectedWidgets.add(connectButton);
-
-        disconnectedWidgets.setDebug(true);
+        disconnectedWidgets.add(connectButton).colspan(2).width(100).height(30).left();
 
         //Create the connected widgets
         connectedWidgets = new Table();
