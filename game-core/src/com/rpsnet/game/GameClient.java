@@ -26,7 +26,6 @@ public class GameClient
     {
         //Create the client and start running it in another thread
         client = new Client();
-        client.start();
 
         //Register classes with Kryonet
         NetworkHandler.register(client);
@@ -44,6 +43,7 @@ public class GameClient
                 //Attempt to connect to the server
                 try
                 {
+                    client.start();
                     name = inputName;
                     client.connect(5000, "127.0.0.1", NetworkHandler.port);
                 }

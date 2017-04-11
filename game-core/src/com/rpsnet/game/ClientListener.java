@@ -41,8 +41,6 @@ public class ClientListener extends Listener
         {
             //If the server didn't accept the name registration, then abort the connection
             Packets.RegisterNameResponse response = (Packets.RegisterNameResponse)o;
-            System.out.println(response.requestedName);
-            System.out.print(response.responseType);
 
             if(response.responseType != Packets.RegisterNameResponse.ResponseType.ACCEPTED)
             {

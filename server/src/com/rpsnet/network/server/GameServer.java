@@ -98,7 +98,7 @@ public class GameServer
                 //Check if the requested name exists in the list of remote clients
                 for (RemoteClient client : remoteClients.values())
                 {
-                    if (client.getPlayerName() == name)
+                    if (name.equals(client.getPlayerName()))
                     {
                         responseType = Packets.RegisterNameResponse.ResponseType.NAME_EXISTS;
                     }
@@ -131,6 +131,8 @@ public class GameServer
         if(remoteClients.containsKey(connection))
         {
             RemoteClient client = remoteClients.get(connection);
+
+            //Only queue the client for matchmaking if they are idle
             if(client.getClientState() == ClientState.IDLE)
             {
                 client.setClientState(ClientState.QUEUED);
@@ -170,5 +172,16 @@ public class GameServer
 
         //Now assign the new count map to the old count map
         playerCount = newPlayerCount;
+    }
+
+    public void broadcastPlayerCount()
+    {
+        Packets.PlayerCount playerCount = new Packets.PlayerCount();
+        playerCount.playerCount = getPlayerCount();
+
+        for(Connection connection : remoteClients.keySet())
+        {
+            connection.sendTCP(playerCount);
+        }
     }
 }

@@ -16,6 +16,7 @@ public class UpdateThread implements Runnable
             try
             {
                 gameServer.refreshPlayerCount();
+                gameServer.broadcastPlayerCount();
                 sleep(3000);
             }
             catch (Exception e)
