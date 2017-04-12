@@ -57,6 +57,8 @@ public class Packets
         public GameChoice choice;
     }
 
+    public static class OpponentChosen{}
+
     public static class RoundResult
     {
         public byte winner; //1 if won round, 2 if drew round and 3 if lost round

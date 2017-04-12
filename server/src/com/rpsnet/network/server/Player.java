@@ -24,6 +24,11 @@ public class Player
         choice = c;
     }
 
+    public void refreshChoice()
+    {
+        choice = null;
+    }
+
     public RemoteClient getRemoteClient()
     {
         return remoteClient;

@@ -3,6 +3,7 @@ package com.rpsnet.game.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -20,8 +21,12 @@ public class GameScreen implements NetScreen
     GameClient gameClient;
     Stage stage;
     SpriteBatch batch;
-    Texture backgroundImg;
     GameActors gameActors;
+
+    private Texture backgroundImg;
+    private Texture rockTex;
+    private Texture paperTex;
+    private Texture scissorsTex;
 
     private int gameID;
 
@@ -41,6 +46,9 @@ public class GameScreen implements NetScreen
         //Assign SpriteBatch and textures
         batch = new SpriteBatch();
         backgroundImg = new Texture("background.jpg");
+        rockTex = new Texture("rock.png");
+        paperTex = new Texture("paper.png");
+        scissorsTex = new Texture("scissors.png");
 
         //Assign GameClient and gameID
         gameClient = client;
@@ -79,7 +87,15 @@ public class GameScreen implements NetScreen
      */
     public void updateGame(Packets.RoundResult result)
     {
-        gameActors.showChoiceWidgets();
+        gameActors.nextRound(result.playerScore, result.opponentScore);
+    }
+
+    /**
+     * Called when the opponent has chosen but the player hasn't
+     */
+    public void opponentChosen()
+    {
+        gameActors.setOpponentStatusText("Chosen", Color.GREEN)    ;
     }
 
     public void updateConnectionInfo(boolean connected)
@@ -122,6 +138,10 @@ public class GameScreen implements NetScreen
     @Override
     public void dispose () {
         batch.dispose();
+        backgroundImg.dispose();
+        rockTex.dispose();
+        paperTex.dispose();
+        scissorsTex.dispose();
     }
 
     public int getGameID()

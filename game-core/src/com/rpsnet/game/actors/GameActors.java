@@ -95,24 +95,27 @@ public class GameActors implements Disposable
         rockButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                setPlayerStatusText("Chosen", Color.GREEN);
                 gameScreen.makeChoice(GameChoice.ROCK);
             }
         });
 
         //Create Paper Button
         paperButton = new TextButton("Paper", buttonStyle);
-        rockButton.addListener( new ClickListener() {
+        paperButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                setPlayerStatusText("Chosen", Color.GREEN);
                 gameScreen.makeChoice(GameChoice.PAPER);
             }
         });
 
         //Create Scissors Button
         scissorsButton = new TextButton("Scissors", buttonStyle);
-        rockButton.addListener( new ClickListener() {
+        scissorsButton.addListener( new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                setPlayerStatusText("Chosen", Color.GREEN);
                 gameScreen.makeChoice(GameChoice.SCISSORS);
             }
         });
@@ -166,6 +169,42 @@ public class GameActors implements Disposable
     public void showChoiceWidgets()
     {
         choiceWidgets.setVisible(true);
+    }
+
+    /**
+     * Sets the opponent turn status text
+     * @param text The text to show
+     * @param color The color of the text
+     */
+    public void setPlayerStatusText(String text, Color color)
+    {
+        playerTurnStatusText.setText(text);
+        playerTurnStatusText.setColor(color);
+    }
+
+    /**
+     * Sets the opponent turn status text
+     * @param text The text to show
+     * @param color The color of the text
+     */
+    public void setOpponentStatusText(String text, Color color)
+    {
+        opponentTurnStatusText.setText(text);
+        opponentTurnStatusText.setColor(color);
+    }
+
+    /**
+     * Updates the actors for the next game round
+     * @param playerScore The new player score to display
+     * @param opponentScore The new opponent score to display
+     */
+    public void nextRound(int playerScore, int opponentScore)
+    {
+        playerScoreText.setText("Score: " + playerScore);
+        opponentScoreText.setText("Score: " + opponentScore);
+        setPlayerStatusText("Waiting...", Color.RED);
+        setOpponentStatusText("Waiting...", Color.RED);
+        showChoiceWidgets();
     }
 
     /**

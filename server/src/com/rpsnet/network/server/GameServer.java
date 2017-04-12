@@ -253,6 +253,7 @@ public class GameServer
         if(!activeGames.containsKey(id))
             Log.error("Tried to close a game that doesn't exist! ID: " + id);
 
+        Log.info("Closed game with ID" + id);
         activeGames.remove(id);
     }
 

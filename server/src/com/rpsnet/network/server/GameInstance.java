@@ -76,10 +76,22 @@ public class GameInstance
             //Send the response to player 2
             player2.getRemoteClient().getConnection().sendTCP(roundResult);
 
+            //Refresh both players choices
+            player1.refreshChoice();
+            player2.refreshChoice();
+
             //Remove this game from the servers list of active games if a player has won
             if(gameOver)
                 gameServer.gameFinished(gameID);
+
+            return;
         }
+
+        //If only one player has made a choice, alert the other player
+        if(player1.getRemoteClient() == player)
+            player2.getRemoteClient().getConnection().sendTCP(new Packets.OpponentChosen());
+        else if(player2.getRemoteClient() == player)
+            player1.getRemoteClient().getConnection().sendTCP(new Packets.OpponentChosen());
     }
 
     /**
