@@ -5,10 +5,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.rpsnet.game.screens.GameScreen;
-import com.rpsnet.game.screens.MainMenuScreen;
+import com.rpsnet.network.GameChoice;
 import com.rpsnet.network.Packets;
 
 public class GameActors implements Disposable
@@ -21,7 +23,7 @@ public class GameActors implements Disposable
     private final BitmapFont bigFont;
     private final BitmapFont inputFont;
 
-    public final TextButton.TextButtonStyle buttonStyle;
+    private final TextButton.TextButtonStyle buttonStyle;
     private final Label.LabelStyle smallLabelStyle;
     private final Label.LabelStyle bigLabelStyle;
 
@@ -32,8 +34,13 @@ public class GameActors implements Disposable
     private final Label opponentScoreText;
     private final Label opponentTurnStatusText;
 
+    private final TextButton rockButton;
+    private final TextButton paperButton;
+    private final TextButton scissorsButton;
+
     private final Table playerInfoWidgets;
     private final Table opponentInfoWidgets;
+    private final Table choiceWidgets;
 
     public GameActors(GameScreen screen, Packets.GameSetup gameInfo)
     {
@@ -83,6 +90,33 @@ public class GameActors implements Disposable
         opponentTurnStatusText = new Label("Waiting...", smallLabelStyle);
         opponentTurnStatusText.setColor(Color.RED);
 
+        //Create Rock button
+        rockButton = new TextButton("Rock", buttonStyle);
+        rockButton.addListener( new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                gameScreen.makeChoice(GameChoice.ROCK);
+            }
+        });
+
+        //Create Paper Button
+        paperButton = new TextButton("Paper", buttonStyle);
+        rockButton.addListener( new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                gameScreen.makeChoice(GameChoice.PAPER);
+            }
+        });
+
+        //Create Scissors Button
+        scissorsButton = new TextButton("Scissors", buttonStyle);
+        rockButton.addListener( new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                gameScreen.makeChoice(GameChoice.SCISSORS);
+            }
+        });
+
         //Create player widgets
         playerInfoWidgets = new Table();
         playerInfoWidgets.setFillParent(true);
@@ -106,6 +140,32 @@ public class GameActors implements Disposable
         opponentInfoWidgets.add(opponentScoreText).right();
         opponentInfoWidgets.row();
         opponentInfoWidgets.add(opponentTurnStatusText).right();
+
+        //Create choice widgets
+        choiceWidgets = new Table();
+        choiceWidgets.setFillParent(true);
+
+        //Add actors to the choice widgets
+        choiceWidgets.bottom();
+        choiceWidgets.add(rockButton).width(240).height(100);
+        choiceWidgets.add(paperButton).width(240).height(100);
+        choiceWidgets.add(scissorsButton).width(240).height(100);
+    }
+
+    /**
+     * Hides the choice widgets
+     */
+    public void hideChoiceWidgets()
+    {
+        choiceWidgets.setVisible(false);
+    }
+
+    /**
+     * Shows the choice widgets
+     */
+    public void showChoiceWidgets()
+    {
+        choiceWidgets.setVisible(true);
     }
 
     /**
@@ -124,6 +184,15 @@ public class GameActors implements Disposable
     public Table getOpponentInfoWidgets()
     {
         return opponentInfoWidgets;
+    }
+
+    /**
+     * Gets the choice widgets
+     * @return The choice widgets
+     */
+    public Table getChoiceWidgets()
+    {
+        return choiceWidgets;
     }
 
     @Override

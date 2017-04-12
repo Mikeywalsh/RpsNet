@@ -45,5 +45,9 @@ public class ServerListener extends Listener
         {
             gameServer.queueClientMatchmaking(connection);
         }
+        else if(o instanceof Packets.ChoiceMade)
+        {
+            gameServer.makeChoiceInGame(connection, (Packets.ChoiceMade)o);
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.rpsnet.game;
 
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
+import com.rpsnet.game.screens.GameScreen;
 import com.rpsnet.game.screens.MainMenuScreen;
 import com.rpsnet.network.Packets;
 
@@ -56,6 +57,13 @@ public class ClientListener extends Listener
             } else if (o instanceof Packets.GameSetup)
             {
                 gameClient.startGame((Packets.GameSetup) o);
+            }
+        }
+        else if(gameClient.getCurrentScreen() instanceof GameScreen)
+        {
+            if(o instanceof Packets.RoundResult)
+            {
+                ((GameScreen)gameClient.getCurrentScreen()).updateGame((Packets.RoundResult)o);
             }
         }
     }

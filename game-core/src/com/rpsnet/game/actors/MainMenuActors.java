@@ -27,7 +27,7 @@ public class MainMenuActors extends Table implements Disposable
     private final BitmapFont inputFont;
 
     private final TextButton.TextButtonStyle largeButtonStyle;
-    public final TextButton.TextButtonStyle smallButtonStyle;
+    private final TextButton.TextButtonStyle smallButtonStyle;
     private final Label.LabelStyle smallLabelStyle;
     private final Label.LabelStyle bigLabelStyle;
     private final TextField.TextFieldStyle textFieldStyle;

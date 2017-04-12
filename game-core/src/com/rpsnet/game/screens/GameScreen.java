@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.rpsnet.game.GameClient;
 import com.rpsnet.game.RPSNet;
 import com.rpsnet.game.actors.GameActors;
+import com.rpsnet.network.GameChoice;
 import com.rpsnet.network.Packets;
 
 public class GameScreen implements NetScreen
@@ -21,6 +22,8 @@ public class GameScreen implements NetScreen
     SpriteBatch batch;
     Texture backgroundImg;
     GameActors gameActors;
+
+    private int gameID;
 
     public GameScreen(RPSNet g, GameClient client, Packets.GameSetup setupInfo)
     {
@@ -33,14 +36,16 @@ public class GameScreen implements NetScreen
         gameActors = new GameActors(this, setupInfo);
         stage.addActor(gameActors.getPlayerInfoWidgets());
         stage.addActor(gameActors.getOpponentInfoWidgets());
+        stage.addActor(gameActors.getChoiceWidgets());
 
         //Assign SpriteBatch and textures
         batch = new SpriteBatch();
         backgroundImg = new Texture("background.jpg");
 
-        //Assign GameClient
+        //Assign GameClient and gameID
         gameClient = client;
         gameClient.setCurrentScreen(this);
+        gameID = setupInfo.gameID;
 
         Gdx.gl.glClearColor(1, 0, 1, 1);
     }
@@ -56,6 +61,25 @@ public class GameScreen implements NetScreen
 
         stage.act();
         stage.draw();
+    }
+
+    /**
+     * Called when the user has made a choice to send to the server
+     * @param choice The choice that the palyer has made
+     */
+    public void makeChoice(GameChoice choice)
+    {
+        gameActors.hideChoiceWidgets();
+        gameClient.makeChoice(choice);
+    }
+
+    /**
+     * Called when both players have made their choice and the server has sent a responce
+     * @param result The result of the current round
+     */
+    public void updateGame(Packets.RoundResult result)
+    {
+        gameActors.showChoiceWidgets();
     }
 
     public void updateConnectionInfo(boolean connected)
@@ -99,4 +123,10 @@ public class GameScreen implements NetScreen
     public void dispose () {
         batch.dispose();
     }
+
+    public int getGameID()
+    {
+        return gameID;
+    }
+
 }

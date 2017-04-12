@@ -50,4 +50,18 @@ public class Packets
         public String playerName;
         public String opponentName;
     }
+
+    public static class ChoiceMade
+    {
+        public int gameID;
+        public GameChoice choice;
+    }
+
+    public static class RoundResult
+    {
+        public byte winner; //1 if won round, 2 if drew round and 3 if lost round
+        public boolean gameOver;
+        public int playerScore;
+        public int opponentScore;
+    }
 }

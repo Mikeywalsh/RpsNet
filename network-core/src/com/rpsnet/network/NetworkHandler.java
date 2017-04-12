@@ -21,5 +21,8 @@ public class NetworkHandler
         kryo.register(Packets.PlayerCount.class);
         kryo.register(Packets.MatchmakeRequest.class);
         kryo.register(Packets.GameSetup.class);
+        kryo.register(GameChoice.class);
+        kryo.register(Packets.ChoiceMade.class);
+        kryo.register(Packets.RoundResult.class);
     }
 }

@@ -33,6 +33,11 @@ public class GameServer
     private Map<ClientState, Integer> playerCount;
 
     /**
+     * Contains a list of all active games on the server
+     */
+    private Map<Integer, GameInstance> activeGames;
+
+    /**
      * The amount of games created since the server was launched
      * Used to create unique game ID's
      */
@@ -56,6 +61,7 @@ public class GameServer
         //Initialise remoteClients, state count and other variables
         remoteClients = new HashMap<>();
         playerCount = new HashMap<>();
+        activeGames = new HashMap<>();
         refreshPlayerCount();
         gamesCreated = 0;
 
@@ -202,6 +208,10 @@ public class GameServer
                     players.get(0).setClientState(ClientState.INGAME);
                     players.get(1).setClientState(ClientState.INGAME);
 
+                    //Create a game instance and add it to the list of all active game instances
+                    GameInstance newGame = new GameInstance(this, gamesCreated, players.get(0), players.get(1));
+                    activeGames.put(gamesCreated, newGame);
+
                     //Output matchup to log
                     Log.info("Game " + gamesCreated + ": " + players.get(0).getPlayerName() + " vs " + players.get(1).getPlayerName());
                     gamesCreated++;
@@ -212,6 +222,38 @@ public class GameServer
             }
         }
 
+    }
+
+    /**
+     * Called when a client makes a choice in a game
+     * @param playerConnection The connection of the client who made the choice
+     * @param choiceMade The gameID and choice that the player has made
+     */
+    public void makeChoiceInGame(Connection playerConnection, Packets.ChoiceMade choiceMade)
+    {
+        if(!remoteClients.containsKey(playerConnection))
+            Log.error("Could not find the client to make the choice for");
+
+        if(!activeGames.containsKey(choiceMade.gameID))
+            Log.error("Could not find the game to make the choice in");
+
+        RemoteClient clientMakingChoice = remoteClients.get(playerConnection);
+        GameInstance gameBeingPlayed = activeGames.get(choiceMade.gameID);
+
+        gameBeingPlayed.makeChoice(clientMakingChoice, choiceMade.choice);
+    }
+
+    /**
+     * Called when a game has finished
+     * Removes the game with the specified ID from the list of active games
+     * @param id The ID of the game to close
+     */
+    public void gameFinished(int id)
+    {
+        if(!activeGames.containsKey(id))
+            Log.error("Tried to close a game that doesn't exist! ID: " + id);
+
+        activeGames.remove(id);
     }
 
     public Map<ClientState, Integer> getPlayerCount()
