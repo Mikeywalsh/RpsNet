@@ -67,7 +67,7 @@ public class ClientListener extends Listener
             }
             else if(o instanceof Packets.OpponentChosen)
             {
-                ((GameScreen)gameClient.getCurrentScreen()).opponentChosen();
+                ((GameScreen)gameClient.getCurrentScreen()).opponentChosen(((Packets.OpponentChosen)o).choice);
             }
         }
     }

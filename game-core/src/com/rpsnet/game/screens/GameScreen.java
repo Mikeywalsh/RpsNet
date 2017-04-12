@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -28,6 +29,9 @@ public class GameScreen implements NetScreen
     private Texture paperTex;
     private Texture scissorsTex;
 
+    private Sprite playerChoice;
+    private Sprite opponentChoice;
+
     private int gameID;
 
     public GameScreen(RPSNet g, GameClient client, Packets.GameSetup setupInfo)
@@ -43,12 +47,16 @@ public class GameScreen implements NetScreen
         stage.addActor(gameActors.getOpponentInfoWidgets());
         stage.addActor(gameActors.getChoiceWidgets());
 
-        //Assign SpriteBatch and textures
+        //Assign SpriteBatch, textures and sprites
         batch = new SpriteBatch();
         backgroundImg = new Texture("background.jpg");
         rockTex = new Texture("rock.png");
         paperTex = new Texture("paper.png");
         scissorsTex = new Texture("scissors.png");
+        opponentChoice = new Sprite();
+        playerChoice = new Sprite();
+        playerChoice.setPosition((Gdx.graphics.getWidth() / 4) - (opponentChoice.getWidth() / 2), (Gdx.graphics.getHeight() / 2) - (opponentChoice.getHeight() / 2));
+        opponentChoice.setPosition(Gdx.graphics.getWidth() - (Gdx.graphics.getWidth() / 4) - (opponentChoice.getWidth() / 2), (Gdx.graphics.getHeight() / 2) - (opponentChoice.getHeight() / 2));
 
         //Assign GameClient and gameID
         gameClient = client;
@@ -65,6 +73,10 @@ public class GameScreen implements NetScreen
 
         batch.begin();
         batch.draw(backgroundImg,0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        if(playerChoice.getTexture() != null)
+            playerChoice.draw(batch);
+        if(opponentChoice.getTexture() != null)
+            opponentChoice.draw(batch);
         batch.end();
 
         stage.act();
@@ -79,6 +91,18 @@ public class GameScreen implements NetScreen
     {
         gameActors.hideChoiceWidgets();
         gameClient.makeChoice(choice);
+        switch (choice)
+        {
+            case ROCK:
+                playerChoice.setTexture(rockTex);
+                break;
+            case PAPER:
+                playerChoice.setTexture(paperTex);
+                break;
+            case SCISSORS:
+                playerChoice.setTexture(scissorsTex);
+                break;
+        }
     }
 
     /**
@@ -93,9 +117,21 @@ public class GameScreen implements NetScreen
     /**
      * Called when the opponent has chosen but the player hasn't
      */
-    public void opponentChosen()
+    public void opponentChosen(GameChoice choice)
     {
-        gameActors.setOpponentStatusText("Chosen", Color.GREEN)    ;
+        gameActors.setOpponentStatusText("Chosen", Color.GREEN);
+        switch (choice)
+        {
+            case ROCK:
+                opponentChoice.setTexture(rockTex);
+                break;
+            case PAPER:
+                opponentChoice.setTexture(paperTex);
+                break;
+            case SCISSORS:
+                opponentChoice.setTexture(scissorsTex);
+                break;
+        }
     }
 
     public void updateConnectionInfo(boolean connected)

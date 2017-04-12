@@ -57,7 +57,10 @@ public class Packets
         public GameChoice choice;
     }
 
-    public static class OpponentChosen{}
+    public static class OpponentChosen
+    {
+        public GameChoice choice;
+    }
 
     public static class RoundResult
     {

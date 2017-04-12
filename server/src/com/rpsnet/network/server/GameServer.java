@@ -240,6 +240,8 @@ public class GameServer
         RemoteClient clientMakingChoice = remoteClients.get(playerConnection);
         GameInstance gameBeingPlayed = activeGames.get(choiceMade.gameID);
 
+        //TEMP
+        System.out.println("GAME ID FOR BUG: " + choiceMade.gameID);
         gameBeingPlayed.makeChoice(clientMakingChoice, choiceMade.choice);
     }
 

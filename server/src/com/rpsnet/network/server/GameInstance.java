@@ -30,10 +30,20 @@ public class GameInstance
         if(player1.getRemoteClient() != player && player2.getRemoteClient() != player)
             Log.error("Client with name: " + player.getPlayerName() + " tried to make a choice in a game they are not in!");
 
+        //Make the choice and alert the opposing player
+        Packets.OpponentChosen opponentChoice = new Packets.OpponentChosen();
+        opponentChoice.choice = choice;
+
         if(player1.getRemoteClient() == player)
+        {
             player1.makeChoice(choice);
+            player2.getRemoteClient().getConnection().sendTCP(opponentChoice);
+        }
         else if(player2.getRemoteClient() == player)
+        {
             player2.makeChoice(choice);
+            player1.getRemoteClient().getConnection().sendTCP(opponentChoice);
+        }
 
         if(player1.getChoice() != null && player2.getChoice() != null)
         {
@@ -83,15 +93,7 @@ public class GameInstance
             //Remove this game from the servers list of active games if a player has won
             if(gameOver)
                 gameServer.gameFinished(gameID);
-
-            return;
         }
-
-        //If only one player has made a choice, alert the other player
-        if(player1.getRemoteClient() == player)
-            player2.getRemoteClient().getConnection().sendTCP(new Packets.OpponentChosen());
-        else if(player2.getRemoteClient() == player)
-            player1.getRemoteClient().getConnection().sendTCP(new Packets.OpponentChosen());
     }
 
     /**
