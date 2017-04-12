@@ -10,6 +10,10 @@ public class DesktopLauncher {
 		TexturePacker.process("UI-Raw", "UI", "uiElements");
 
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+
+		config.width = 720;
+		config.height = 480;
+		config.resizable = false;
 		new LwjglApplication(new RPSNet(), config);
 	}
 }

@@ -189,10 +189,12 @@ public class GameServer
                     gameSetup.gameID = gamesCreated;
 
                     //Send the packet to the first player
+                    gameSetup.playerName = players.get(0).getPlayerName();
                     gameSetup.opponentName = players.get(1).getPlayerName();
                     players.get(0).getConnection().sendTCP(gameSetup);
 
                     //Send the packet to the second player
+                    gameSetup.playerName = players.get(1).getPlayerName();
                     gameSetup.opponentName = players.get(0).getPlayerName();
                     players.get(1).getConnection().sendTCP(gameSetup);
 

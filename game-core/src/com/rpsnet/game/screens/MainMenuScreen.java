@@ -12,10 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.utils.viewport.*;
 import com.rpsnet.game.GameClient;
 import com.rpsnet.game.RPSNet;
 import com.rpsnet.game.actors.MainMenuActors;
@@ -25,15 +22,21 @@ public class MainMenuScreen implements Screen, NetScreen
 {
     RPSNet game;
     GameClient gameClient;
+
     Stage stage;
     SpriteBatch batch;
     Texture backgroundImg;
     MainMenuActors mainMenuActors;
 
     public MainMenuScreen(RPSNet g, GameClient client) {
+
+        //Assign SpriteBatch and textures
+        batch = new SpriteBatch();
+        backgroundImg = new Texture("background.jpg");
+
         //Setup the stage
         game = g;
-        stage = new Stage(new ScreenViewport());
+        stage = new Stage(new ScreenViewport(), batch);
         Gdx.input.setInputProcessor(stage);
 
         //Setup the actors
@@ -42,10 +45,6 @@ public class MainMenuScreen implements Screen, NetScreen
         stage.addActor(mainMenuActors.getConnectedWidgets());
         stage.addActor(mainMenuActors.getMenuWidgets());
         stage.addActor(mainMenuActors.getMatchmakingWidgets());
-
-        //Assign SpriteBatch and textures
-        batch = new SpriteBatch();
-        backgroundImg = new Texture("background.jpg");
 
         //Assign GameClient
         gameClient = client;

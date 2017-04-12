@@ -81,7 +81,7 @@ public class MainMenuActors extends Table implements Disposable
         uiAtlas = new TextureAtlas(Gdx.files.internal("UI/uiElements.atlas"));
         skin.addRegions(uiAtlas);
 
-        //Create sarge button style
+        //Create large button style
         largeButtonStyle = new TextButton.TextButtonStyle();
         largeButtonStyle.font = bigFont;
         largeButtonStyle.up = skin.getDrawable("greenButtonUp");
@@ -179,7 +179,7 @@ public class MainMenuActors extends Table implements Disposable
         disconnectedWidgets = new Table();
         disconnectedWidgets.setFillParent(true);
 
-        //Add the actors to the disconnected widget
+        //Add actors to the disconnected widget
         disconnectedWidgets.left();
         disconnectedWidgets.top();
         disconnectedWidgets.add(disconnectedText).left().colspan(2);
