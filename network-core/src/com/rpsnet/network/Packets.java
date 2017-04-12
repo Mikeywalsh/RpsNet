@@ -43,4 +43,10 @@ public class Packets
     }
 
     public static class MatchmakeRequest { }
+
+    public static class GameSetup
+    {
+        public int gameID;
+        public String opponentName;
+    }
 }

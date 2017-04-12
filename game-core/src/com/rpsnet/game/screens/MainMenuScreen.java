@@ -1,5 +1,6 @@
 package com.rpsnet.game.screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
@@ -16,19 +17,22 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.rpsnet.game.GameClient;
+import com.rpsnet.game.RPSNet;
 import com.rpsnet.game.actors.MainMenuActors;
 import com.rpsnet.network.Packets;
 
 public class MainMenuScreen implements Screen, NetScreen
 {
+    RPSNet game;
     GameClient gameClient;
     Stage stage;
     SpriteBatch batch;
     Texture backgroundImg;
     MainMenuActors mainMenuActors;
 
-    public MainMenuScreen() {
+    public MainMenuScreen(RPSNet g, GameClient client) {
         //Setup the stage
+        game = g;
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
@@ -39,10 +43,12 @@ public class MainMenuScreen implements Screen, NetScreen
         stage.addActor(mainMenuActors.getMenuWidgets());
         stage.addActor(mainMenuActors.getMatchmakingWidgets());
 
+        //Assign SpriteBatch and textures
         batch = new SpriteBatch();
         backgroundImg = new Texture("background.jpg");
 
-        gameClient = new GameClient();
+        //Assign GameClient
+        gameClient = client;
         gameClient.setCurrentScreen(this);
 
         Gdx.gl.glClearColor(1, 0, 1, 1);
@@ -128,5 +134,10 @@ public class MainMenuScreen implements Screen, NetScreen
     public void dispose () {
         batch.dispose();
         backgroundImg.dispose();
+    }
+
+    public RPSNet getGame()
+    {
+        return game;
     }
 }

@@ -6,6 +6,7 @@ import com.esotericsoftware.minlog.Log;
 import com.rpsnet.network.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +32,12 @@ public class GameServer
      */
     private Map<ClientState, Integer> playerCount;
 
+    /**
+     * The amount of games created since the server was launched
+     * Used to create unique game ID's
+     */
+    private int gamesCreated;
+
     public GameServer() throws IOException {
         //Create the server object
         server = new Server();
@@ -46,10 +53,11 @@ public class GameServer
         //Start running the server
         server.start();
 
-        //Initialise remoteClients and state count
+        //Initialise remoteClients, state count and other variables
         remoteClients = new HashMap<>();
         playerCount = new HashMap<>();
         refreshPlayerCount();
+        gamesCreated = 0;
 
         //Start update thread
         updateThread = new UpdateThread();
@@ -155,6 +163,53 @@ public class GameServer
         {
             Log.error("A remote client with the provided connection does not exist! ID: " + connection.getID());
         }
+    }
+
+    /**
+     * Called every few seconds to check if any matches can be created with the queued players
+     */
+    public void attemptMatchmake()
+    {
+        //Return if there aren't enough players on the server
+        if(remoteClients.size() < 2)
+            return;
+
+        ArrayList<RemoteClient> players = new ArrayList<>();
+
+        //Try and pair queued players with eachother
+        for(RemoteClient client : remoteClients.values())
+        {
+            if(client.getClientState() == ClientState.QUEUED)
+            {
+                players.add(client);
+                if(players.size() == 2)
+                {
+                    //Create a GameSetup packet to send to each client
+                    Packets.GameSetup gameSetup = new Packets.GameSetup();
+                    gameSetup.gameID = gamesCreated;
+
+                    //Send the packet to the first player
+                    gameSetup.opponentName = players.get(1).getPlayerName();
+                    players.get(0).getConnection().sendTCP(gameSetup);
+
+                    //Send the packet to the second player
+                    gameSetup.opponentName = players.get(0).getPlayerName();
+                    players.get(1).getConnection().sendTCP(gameSetup);
+
+                    //Change the state for each player to be ingame
+                    players.get(0).setClientState(ClientState.INGAME);
+                    players.get(1).setClientState(ClientState.INGAME);
+
+                    //Output matchup to log
+                    Log.info("Game " + gamesCreated + ": " + players.get(0).getPlayerName() + " vs " + players.get(1).getPlayerName());
+                    gamesCreated++;
+
+                    //Clear the players list and carry on running, so multiple games can be created each function call
+                    players = new ArrayList<>();
+                }
+            }
+        }
+
     }
 
     public Map<ClientState, Integer> getPlayerCount()

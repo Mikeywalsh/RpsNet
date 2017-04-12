@@ -20,5 +20,6 @@ public class NetworkHandler
         kryo.register(Packets.PlayerCountRequest.class);
         kryo.register(Packets.PlayerCount.class);
         kryo.register(Packets.MatchmakeRequest.class);
+        kryo.register(Packets.GameSetup.class);
     }
 }

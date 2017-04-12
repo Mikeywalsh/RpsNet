@@ -4,7 +4,6 @@ import com.badlogic.gdx.Screen;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.minlog.Log;
-import com.rpsnet.game.actors.MainMenuActors;
 import com.rpsnet.game.screens.MainMenuScreen;
 import com.rpsnet.game.screens.NetScreen;
 import com.rpsnet.network.NetworkHandler;
@@ -96,6 +95,11 @@ public class GameClient
         }
     }
 
+    public void startGame(Packets.GameSetup setupInfo)
+    {
+        ((MainMenuScreen)currentScreen).getGame().setGameInfo(setupInfo);
+    }
+
     public Packets.PlayerCount getPlayerCountInfo() { return playerCountInfo; }
 
     public String getPlayerName(){ return name; }
@@ -122,6 +126,11 @@ public class GameClient
         Boolean connected = client.isConnected();
 
         currentScreen.updateConnectionInfo(connected);
+    }
+
+    public Screen getCurrentScreen()
+    {
+        return currentScreen;
     }
 
     public void displayErrorMessage(String message)
