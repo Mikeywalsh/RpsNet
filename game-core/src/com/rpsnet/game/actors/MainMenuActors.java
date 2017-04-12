@@ -282,6 +282,8 @@ public class MainMenuActors extends Table implements Disposable
             enableButton(connectButton);
             disconnectedWidgets.setVisible(true);
             connectedWidgets.setVisible(false);
+            matchmakingWidgets.setVisible(false);
+            menuWidgets.setVisible(true);
         }
     }
 
