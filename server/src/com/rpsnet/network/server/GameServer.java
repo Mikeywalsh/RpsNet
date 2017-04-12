@@ -148,6 +148,10 @@ public class GameServer
         }
     }
 
+    /**
+     * Queues a client for matchmaking
+     * @param connection The client to Queue up
+     */
     public void queueClientMatchmaking(Connection connection)
     {
         if(remoteClients.containsKey(connection))
@@ -232,16 +236,20 @@ public class GameServer
     public void makeChoiceInGame(Connection playerConnection, Packets.ChoiceMade choiceMade)
     {
         if(!remoteClients.containsKey(playerConnection))
+        {
             Log.error("Could not find the client to make the choice for");
+            return;
+        }
 
         if(!activeGames.containsKey(choiceMade.gameID))
+        {
             Log.error("Could not find the game to make the choice in");
+            return;
+        }
 
         RemoteClient clientMakingChoice = remoteClients.get(playerConnection);
         GameInstance gameBeingPlayed = activeGames.get(choiceMade.gameID);
 
-        //TEMP
-        System.out.println("GAME ID FOR BUG: " + choiceMade.gameID);
         gameBeingPlayed.makeChoice(clientMakingChoice, choiceMade.choice);
     }
 
@@ -264,6 +272,10 @@ public class GameServer
         return playerCount;
     }
 
+    /**
+     * Recalculates the amount of players on the server for easier broadcasting
+     * Player amount is only calculated every server update instead of every player count request/send
+     */
     public void refreshPlayerCount()
     {
         Map<ClientState, Integer> newPlayerCount = new HashMap<>();
@@ -284,6 +296,9 @@ public class GameServer
         playerCount = newPlayerCount;
     }
 
+    /**
+     * Broadcasts information about the amount of players connected to the server to all players on the server
+     */
     public void broadcastPlayerCount()
     {
         Packets.PlayerCount playerCount = new Packets.PlayerCount();

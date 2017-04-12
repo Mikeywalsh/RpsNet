@@ -33,6 +33,10 @@ public class GameScreen implements NetScreen
     private Sprite opponentChoice;
 
     private int gameID;
+    private boolean roundFinishing;
+    private Packets.RoundResult tempResult;
+    private float roundFinishingTimer;
+    private final float ROUND_FINISH_TIME = 1f;
 
     public GameScreen(RPSNet g, GameClient client, Packets.GameSetup setupInfo)
     {
@@ -53,10 +57,6 @@ public class GameScreen implements NetScreen
         rockTex = new Texture("rock.png");
         paperTex = new Texture("paper.png");
         scissorsTex = new Texture("scissors.png");
-        opponentChoice = new Sprite();
-        playerChoice = new Sprite();
-        playerChoice.setPosition((Gdx.graphics.getWidth() / 4) - (opponentChoice.getWidth() / 2), (Gdx.graphics.getHeight() / 2) - (opponentChoice.getHeight() / 2));
-        opponentChoice.setPosition(Gdx.graphics.getWidth() - (Gdx.graphics.getWidth() / 4) - (opponentChoice.getWidth() / 2), (Gdx.graphics.getHeight() / 2) - (opponentChoice.getHeight() / 2));
 
         //Assign GameClient and gameID
         gameClient = client;
@@ -73,10 +73,49 @@ public class GameScreen implements NetScreen
 
         batch.begin();
         batch.draw(backgroundImg,0,0,Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        if(playerChoice.getTexture() != null)
-            playerChoice.draw(batch);
-        if(opponentChoice.getTexture() != null)
-            opponentChoice.draw(batch);
+
+        if(roundFinishing)
+        {
+            //Increment the round finishing timer
+            roundFinishingTimer += delta;
+
+            //Draw both players choices
+            if(playerChoice != null)
+                playerChoice.draw(batch);
+            if(opponentChoice != null)
+                opponentChoice.draw(batch);
+
+            //Move the choices towards each other
+            if(playerChoice != null && opponentChoice != null && playerChoice.getX() < (Gdx.graphics.getWidth() / 2) + 64 && opponentChoice.getX() > (Gdx.graphics.getWidth() / 2) - 64)
+            {
+                playerChoice.translate(5, 0);
+                opponentChoice.translate(-5, 0);
+            }
+            else
+            {
+                //Destroy the losing choices sprite when both sprites overlap
+                switch (tempResult.winner)
+                {
+                    case 1:
+                        opponentChoice = null;
+                        break;
+                    case 2:
+                        playerChoice = null;
+                        opponentChoice = null;
+                        break;
+                    case 3:
+                        playerChoice = null;
+                        break;
+                }
+            }
+
+            //If the animation is over, go to the next round
+            if(roundFinishingTimer > ROUND_FINISH_TIME)
+            {
+                roundFinishing = false;
+                nextRound();
+            }
+        }
         batch.end();
 
         stage.act();
@@ -91,47 +130,65 @@ public class GameScreen implements NetScreen
     {
         gameActors.hideChoiceWidgets();
         gameClient.makeChoice(choice);
-        switch (choice)
-        {
-            case ROCK:
-                playerChoice.setTexture(rockTex);
-                break;
-            case PAPER:
-                playerChoice.setTexture(paperTex);
-                break;
-            case SCISSORS:
-                playerChoice.setTexture(scissorsTex);
-                break;
-        }
     }
 
     /**
      * Called when both players have made their choice and the server has sent a responce
      * @param result The result of the current round
      */
-    public void updateGame(Packets.RoundResult result)
+    public void startNextRound(Packets.RoundResult result)
     {
-        gameActors.nextRound(result.playerScore, result.opponentScore);
+        //Draw the players choice
+        switch (result.playerChoice)
+        {
+            case ROCK:
+                playerChoice = new Sprite(rockTex);
+                break;
+            case PAPER:
+                playerChoice = new Sprite(paperTex);
+                break;
+            case SCISSORS:
+                playerChoice = new Sprite(scissorsTex);
+                break;
+        }
+        playerChoice.setPosition((Gdx.graphics.getWidth() / 4) - 64, (Gdx.graphics.getHeight() / 2) - 32);
+
+        //Draw the opponents choice
+        switch (result.opponentChoice)
+        {
+            case ROCK:
+                opponentChoice = new Sprite(rockTex);
+                break;
+            case PAPER:
+                opponentChoice = new Sprite(paperTex);
+                break;
+            case SCISSORS:
+                opponentChoice = new Sprite(scissorsTex);
+                break;
+        }
+        opponentChoice.setPosition(Gdx.graphics.getWidth() - (Gdx.graphics.getWidth() / 4) - 64, (Gdx.graphics.getHeight() / 2) - 32);
+
+        //Start the round finish animation
+        roundFinishing = true;
+        roundFinishingTimer = 0;
+        tempResult = result;
+    }
+
+    /**
+     * Moves the game to the next round after the round finish animation has completed
+     */
+    public void nextRound()
+    {
+        gameActors.nextRound(tempResult.playerScore, tempResult.opponentScore);
+        tempResult = null;
     }
 
     /**
      * Called when the opponent has chosen but the player hasn't
      */
-    public void opponentChosen(GameChoice choice)
+    public void opponentChosen()
     {
         gameActors.setOpponentStatusText("Chosen", Color.GREEN);
-        switch (choice)
-        {
-            case ROCK:
-                opponentChoice.setTexture(rockTex);
-                break;
-            case PAPER:
-                opponentChoice.setTexture(paperTex);
-                break;
-            case SCISSORS:
-                opponentChoice.setTexture(scissorsTex);
-                break;
-        }
     }
 
     public void updateConnectionInfo(boolean connected)

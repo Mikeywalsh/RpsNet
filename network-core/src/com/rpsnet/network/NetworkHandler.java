@@ -25,5 +25,6 @@ public class NetworkHandler
         kryo.register(Packets.ChoiceMade.class);
         kryo.register(Packets.RoundResult.class);
         kryo.register(Packets.OpponentChosen.class);
+        kryo.register(Packets.GameEndDisconnect.class);
     }
 }

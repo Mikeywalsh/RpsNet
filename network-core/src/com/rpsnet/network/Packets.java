@@ -57,10 +57,7 @@ public class Packets
         public GameChoice choice;
     }
 
-    public static class OpponentChosen
-    {
-        public GameChoice choice;
-    }
+    public static class OpponentChosen { }
 
     public static class RoundResult
     {
@@ -68,5 +65,9 @@ public class Packets
         public boolean gameOver;
         public int playerScore;
         public int opponentScore;
+        public GameChoice playerChoice;
+        public  GameChoice opponentChoice;
     }
+
+    public static class GameEndDisconnect{}
 }

@@ -25,24 +25,27 @@ public class GameInstance
         player2 = new Player(client2);
     }
 
+    /**
+     * Makes a choice for a player in this game instance
+     * Also checks to see if the round/game has ended as a result
+     * @param player The player making the choice
+     * @param choice The choice being made
+     */
     public void makeChoice(RemoteClient player, GameChoice choice)
     {
         if(player1.getRemoteClient() != player && player2.getRemoteClient() != player)
             Log.error("Client with name: " + player.getPlayerName() + " tried to make a choice in a game they are not in!");
 
         //Make the choice and alert the opposing player
-        Packets.OpponentChosen opponentChoice = new Packets.OpponentChosen();
-        opponentChoice.choice = choice;
-
         if(player1.getRemoteClient() == player)
         {
             player1.makeChoice(choice);
-            player2.getRemoteClient().getConnection().sendTCP(opponentChoice);
+            player2.getRemoteClient().getConnection().sendTCP(new Packets.OpponentChosen());
         }
         else if(player2.getRemoteClient() == player)
         {
             player2.makeChoice(choice);
-            player1.getRemoteClient().getConnection().sendTCP(opponentChoice);
+            player1.getRemoteClient().getConnection().sendTCP(new Packets.OpponentChosen());
         }
 
         if(player1.getChoice() != null && player2.getChoice() != null)
@@ -63,6 +66,8 @@ public class GameInstance
             //Create a response for player 1
             roundResult.playerScore = player1.getScore();
             roundResult.opponentScore = player2.getScore();
+            roundResult.playerChoice = player1.getChoice();
+            roundResult.opponentChoice = player2.getChoice();
             if(winner == player1)
                 roundResult.winner = 1;
             else if(winner == null)
@@ -76,6 +81,8 @@ public class GameInstance
             //Create a response for player 2
             roundResult.playerScore = player2.getScore();
             roundResult.opponentScore = player1.getScore();
+            roundResult.playerChoice = player2.getChoice();
+            roundResult.opponentChoice = player1.getChoice();
             if(winner == player2)
                 roundResult.winner = 1;
             else if(winner == null)

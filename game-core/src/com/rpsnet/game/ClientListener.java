@@ -63,11 +63,11 @@ public class ClientListener extends Listener
         {
             if(o instanceof Packets.RoundResult)
             {
-                ((GameScreen)gameClient.getCurrentScreen()).updateGame((Packets.RoundResult)o);
+                ((GameScreen)gameClient.getCurrentScreen()).startNextRound((Packets.RoundResult)o);
             }
             else if(o instanceof Packets.OpponentChosen)
             {
-                ((GameScreen)gameClient.getCurrentScreen()).opponentChosen(((Packets.OpponentChosen)o).choice);
+                ((GameScreen)gameClient.getCurrentScreen()).opponentChosen();
             }
         }
     }
