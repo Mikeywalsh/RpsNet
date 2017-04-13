@@ -1,12 +1,12 @@
 
 uiElements.png
-size: 1024,64
+size: 1024,128
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
 greenButtonDisabled
   rotate: false
-  xy: 2, 2
+  xy: 2, 71
   size: 190, 49
   split: 16, 16, 16, 16
   pad: 0, 0, 0, 0
@@ -15,7 +15,7 @@ greenButtonDisabled
   index: -1
 greenButtonDown
   rotate: false
-  xy: 194, 2
+  xy: 2, 20
   size: 190, 49
   split: 16, 16, 16, 16
   pad: 0, 0, 0, 0
@@ -24,7 +24,7 @@ greenButtonDown
   index: -1
 greenButtonOver
   rotate: false
-  xy: 386, 2
+  xy: 194, 71
   size: 190, 49
   split: 16, 16, 16, 16
   pad: 0, 0, 0, 0
@@ -33,30 +33,39 @@ greenButtonOver
   index: -1
 greenButtonUp
   rotate: false
-  xy: 578, 2
+  xy: 194, 20
   size: 190, 49
   split: 16, 16, 16, 16
   pad: 0, 0, 0, 0
   orig: 190, 49
   offset: 0, 0
   index: -1
+greyPanel
+  rotate: false
+  xy: 386, 20
+  size: 100, 100
+  split: 16, 16, 16, 16
+  pad: 0, 0, 0, 0
+  orig: 100, 100
+  offset: 0, 0
+  index: -1
 inputCursor
   rotate: false
-  xy: 900, 35
+  xy: 488, 78
   size: 2, 16
   orig: 2, 16
   offset: 0, 0
   index: -1
 inputSelection
   rotate: false
-  xy: 770, 9
+  xy: 2, 2
   size: 4, 16
   orig: 4, 16
   offset: 0, 0
   index: -1
 textFieldBackground
   rotate: false
-  xy: 770, 27
+  xy: 488, 96
   size: 128, 24
   orig: 128, 24
   offset: 0, 0

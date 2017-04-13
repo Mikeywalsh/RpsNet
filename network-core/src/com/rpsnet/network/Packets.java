@@ -47,6 +47,7 @@ public class Packets
     public static class GameSetup
     {
         public int gameID;
+        public int scoreLimit;
         public String playerName;
         public String opponentName;
     }

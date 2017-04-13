@@ -14,6 +14,11 @@ public class RPSNet extends Game
 	GameClient gameClient;
 
 	/**
+	 * Other threads can flag this to allow returning to the menu after a game has ended
+	 */
+	private boolean exitToMenuFlag;
+
+	/**
 	 * Other threads can flag this to allow the start of games from outside the rendering thread
 	 */
 	private boolean startGameFlag;
@@ -38,6 +43,13 @@ public class RPSNet extends Game
 			setGameScreen(startGameInfo);
 			startGameFlag = false;
 		}
+
+		//If another thread has flagged the game to exit to menu, then exit to the main menu
+		if(exitToMenuFlag)
+		{
+			setMenuScreen();
+			exitToMenuFlag = false;
+		}
 	}
 
 	private void setMenuScreen()
@@ -57,6 +69,14 @@ public class RPSNet extends Game
 	{
 		startGameFlag = true;
 		startGameInfo = setupInfo;
+	}
+
+	/**
+	 * Other threads can call this to allow returning to the menu after a game has ended
+	 */
+	public void exitToMenu()
+	{
+		exitToMenuFlag = true;
 	}
 
 	@Override

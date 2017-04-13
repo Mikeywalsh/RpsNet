@@ -1,6 +1,7 @@
 package com.rpsnet.network.server;
 
 import com.esotericsoftware.minlog.Log;
+import com.rpsnet.network.ClientState;
 import com.rpsnet.network.GameChoice;
 import com.rpsnet.network.Packets;
 
@@ -15,7 +16,7 @@ public class GameInstance
     private Player player1;
     private Player player2;
 
-    private final int SCORE_LIMIT = 3;
+    public static final int SCORE_LIMIT = 3;
 
     public GameInstance(GameServer server, int id, RemoteClient client1, RemoteClient client2)
     {
@@ -99,7 +100,11 @@ public class GameInstance
 
             //Remove this game from the servers list of active games if a player has won
             if(gameOver)
+            {
+                player1.getRemoteClient().setClientState(ClientState.IDLE);
+                player2.getRemoteClient().setClientState(ClientState.IDLE);
                 gameServer.gameFinished(gameID);
+            }
         }
     }
 
@@ -125,5 +130,37 @@ public class GameInstance
             return player1;
 
         return player2;
+    }
+
+    /**
+     * Determines if a client is in this game instance or not
+     * @param client The client to check
+     * @return True if the client is in this game, false if not
+     */
+    public boolean containsClient(RemoteClient client)
+    {
+        if(player1.getRemoteClient() == client || player2.getRemoteClient() == client)
+            return true;
+        else
+            return false;
+    }
+
+    /**
+     * Gets the opponent of a client
+     * @param client The client to get the opponent of
+     * @return The opponent client of the client
+     */
+    public RemoteClient getOpponent(RemoteClient client)
+    {
+        if(player1.getRemoteClient() == client)
+        {
+            return player2.getRemoteClient();
+        }
+        else if(player2.getRemoteClient() == client)
+        {
+            return player1.getRemoteClient();
+        }
+
+        return null;
     }
 }

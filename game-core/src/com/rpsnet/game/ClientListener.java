@@ -31,6 +31,7 @@ public class ClientListener extends Listener
     public void disconnected(Connection connection)
     {
         gameClient.updateCurrentScreen();
+        gameClient.displayErrorMessage("You have disconnected!");
     }
 
     public void received(Connection connection, Object o)
@@ -68,6 +69,10 @@ public class ClientListener extends Listener
             else if(o instanceof Packets.OpponentChosen)
             {
                 ((GameScreen)gameClient.getCurrentScreen()).opponentChosen();
+            }
+            else if(o instanceof Packets.GameEndDisconnect)
+            {
+                gameClient.displayErrorMessage("Opponent disconnected!");
             }
         }
     }

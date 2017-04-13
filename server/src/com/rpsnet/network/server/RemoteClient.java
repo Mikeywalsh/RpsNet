@@ -9,11 +9,13 @@ public class RemoteClient
     private Connection connection;
     private String name;
     private ClientState clientState;
+    private int currentGameID;
 
     public RemoteClient(Connection c)
     {
         connection = c;
         clientState = ClientState.NAMELESS;
+        currentGameID = -1;
     }
 
     public Connection getConnection() { return connection; }
@@ -21,6 +23,16 @@ public class RemoteClient
     public String getPlayerName() { return name; }
 
     public ClientState getClientState() { return clientState; }
+
+    public void setGameID(int id)
+    {
+        currentGameID = id;
+    }
+
+    public int getGameID()
+    {
+        return currentGameID;
+    }
 
     public void setName(String val)
     {

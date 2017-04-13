@@ -47,16 +47,18 @@ public class GameScreen implements NetScreen
 
         //Setup the actors
         gameActors = new GameActors(this, setupInfo);
+        stage.addActor(gameActors.getGameInfoWidgets());
         stage.addActor(gameActors.getPlayerInfoWidgets());
         stage.addActor(gameActors.getOpponentInfoWidgets());
         stage.addActor(gameActors.getChoiceWidgets());
+        stage.addActor(gameActors.getGameEndWidgets());
 
         //Assign SpriteBatch, textures and sprites
         batch = new SpriteBatch();
-        backgroundImg = new Texture("background.jpg");
-        rockTex = new Texture("rock.png");
-        paperTex = new Texture("paper.png");
-        scissorsTex = new Texture("scissors.png");
+        backgroundImg = new Texture("Sprites/background.jpg");
+        rockTex = new Texture("Sprites/rock.png");
+        paperTex = new Texture("Sprites/paper.png");
+        scissorsTex = new Texture("Sprites/scissors.png");
 
         //Assign GameClient and gameID
         gameClient = client;
@@ -179,7 +181,7 @@ public class GameScreen implements NetScreen
      */
     public void nextRound()
     {
-        gameActors.nextRound(tempResult.playerScore, tempResult.opponentScore);
+        gameActors.endRound(tempResult);
         tempResult = null;
     }
 
@@ -197,10 +199,13 @@ public class GameScreen implements NetScreen
         System.out.println("Connected: " + connected);
     }
 
+    /**
+     * Called when an error has occured and the game needs to close
+     * @param message The error that has occurred
+     */
     public void displayErrorMessage(String message)
     {
-        //TEMP
-        System.out.println(message);
+        gameActors.endGame(message);
     }
 
     @Override
@@ -235,6 +240,15 @@ public class GameScreen implements NetScreen
         rockTex.dispose();
         paperTex.dispose();
         scissorsTex.dispose();
+    }
+
+    /**
+     * Called to get the game root instance
+     * @return The game root instance
+     */
+    public RPSNet getGameInstance()
+    {
+        return game;
     }
 
     public int getGameID()

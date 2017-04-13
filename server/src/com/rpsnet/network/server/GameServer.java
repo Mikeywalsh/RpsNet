@@ -88,13 +88,35 @@ public class GameServer
     }
 
     /**
-     * Removed a client from the hashmap of clients
+     * Removes a client from the hashmap of clients
+     * If the client was in a game, remove the game instance for the lsit of active games
      * @param connection The connection for the client being removed
      */
     public void removeClient(Connection connection)
     {
         if(remoteClients.containsKey(connection))
         {
+            RemoteClient clientToRemove = remoteClients.get(connection);
+            if(clientToRemove.getClientState() == ClientState.INGAME)
+            {
+                //Check if the client being removed is in a game
+                if(activeGames.containsKey(clientToRemove.getGameID()) && activeGames.get(clientToRemove.getGameID()).containsClient(clientToRemove))
+                {
+                    //If the opponent is still connected, then send them to the main menu
+                    RemoteClient opponent = activeGames.get(clientToRemove.getGameID()).getOpponent(clientToRemove);
+                    if(opponent.getConnection().isConnected())
+                    {
+                        opponent.getConnection().sendTCP(new Packets.GameEndDisconnect());
+                        opponent.setClientState(ClientState.IDLE);
+                        opponent.setGameID(-1);
+                    }
+
+                    //Remove the game instance from the list of active games
+                    gameFinished(clientToRemove.getGameID());
+                }
+            }
+
+            //Finally remove the client from the list of active connections
             remoteClients.remove(connection);
         }
         else
@@ -197,6 +219,7 @@ public class GameServer
                     //Create a GameSetup packet to send to each client
                     Packets.GameSetup gameSetup = new Packets.GameSetup();
                     gameSetup.gameID = gamesCreated;
+                    gameSetup.scoreLimit = GameInstance.SCORE_LIMIT;
 
                     //Send the packet to the first player
                     gameSetup.playerName = players.get(0).getPlayerName();
@@ -211,6 +234,10 @@ public class GameServer
                     //Change the state for each player to be ingame
                     players.get(0).setClientState(ClientState.INGAME);
                     players.get(1).setClientState(ClientState.INGAME);
+
+                    //Change the gameID for each player to the ID of the new game
+                    players.get(0).setGameID(gamesCreated);
+                    players.get(1).setGameID(gamesCreated);
 
                     //Create a game instance and add it to the list of all active game instances
                     GameInstance newGame = new GameInstance(this, gamesCreated, players.get(0), players.get(1));

@@ -32,7 +32,7 @@ public class MainMenuScreen implements Screen, NetScreen
 
         //Assign SpriteBatch and textures
         batch = new SpriteBatch();
-        backgroundImg = new Texture("background.jpg");
+        backgroundImg = new Texture("Sprites/background.jpg");
 
         //Setup the stage
         game = g;
@@ -49,6 +49,7 @@ public class MainMenuScreen implements Screen, NetScreen
         //Assign GameClient
         gameClient = client;
         gameClient.setCurrentScreen(this);
+        gameClient.updateCurrentScreen();
 
         Gdx.gl.glClearColor(1, 0, 1, 1);
     }

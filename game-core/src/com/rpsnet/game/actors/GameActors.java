@@ -27,20 +27,25 @@ public class GameActors implements Disposable
     private final Label.LabelStyle smallLabelStyle;
     private final Label.LabelStyle bigLabelStyle;
 
+    private final Label scoreLimitText;
     private final Label playerNameText;
     private final Label playerScoreText;
     private final Label playerTurnStatusText;
     private final Label opponentNameText;
     private final Label opponentScoreText;
     private final Label opponentTurnStatusText;
+    private final Label gameEndReasonText;
 
     private final TextButton rockButton;
     private final TextButton paperButton;
     private final TextButton scissorsButton;
+    private final TextButton exitToMenuButton;
 
+    private final Table gameInfoWidgets;
     private final Table playerInfoWidgets;
     private final Table opponentInfoWidgets;
     private final Table choiceWidgets;
+    private final Table gameEndWidgets;
 
     public GameActors(GameScreen screen, Packets.GameSetup gameInfo)
     {
@@ -81,6 +86,7 @@ public class GameActors implements Disposable
         bigLabelStyle.font = bigFont;
 
         //Create Labels
+        scoreLimitText = new Label("Score Limit: " + gameInfo.scoreLimit, smallLabelStyle);
         playerNameText = new Label(gameInfo.playerName, smallLabelStyle);
         playerScoreText = new Label("Score: 0", smallLabelStyle);
         playerTurnStatusText = new Label("Waiting...", smallLabelStyle);
@@ -89,6 +95,8 @@ public class GameActors implements Disposable
         opponentScoreText = new Label("Score: 0", smallLabelStyle);
         opponentTurnStatusText = new Label("Waiting...", smallLabelStyle);
         opponentTurnStatusText.setColor(Color.RED);
+        gameEndReasonText = new Label("null", smallLabelStyle);
+        gameEndReasonText.setColor(Color.BLACK);
 
         //Create Rock button
         rockButton = new TextButton("Rock", buttonStyle);
@@ -119,6 +127,23 @@ public class GameActors implements Disposable
                 gameScreen.makeChoice(GameChoice.SCISSORS);
             }
         });
+
+        //Create Exit To Menu Button
+        exitToMenuButton = new TextButton("Exit To Menu", buttonStyle);
+        exitToMenuButton.addListener( new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                gameScreen.getGameInstance().exitToMenu();
+            }
+        });
+
+        //Create game info widgets
+        gameInfoWidgets = new Table();
+        gameInfoWidgets.setFillParent(true);
+
+        //Add actors to the game info widgets
+        gameInfoWidgets.top();
+        gameInfoWidgets.add(scoreLimitText);
 
         //Create player widgets
         playerInfoWidgets = new Table();
@@ -153,6 +178,20 @@ public class GameActors implements Disposable
         choiceWidgets.add(rockButton).width(240).height(100);
         choiceWidgets.add(paperButton).width(240).height(100);
         choiceWidgets.add(scissorsButton).width(240).height(100);
+
+        //Create end of game widgets
+        gameEndWidgets = new Table();
+        gameEndWidgets.setVisible(false);
+
+        //Add actors to the end of game widgets
+        gameEndWidgets.center();
+        gameEndWidgets.add(gameEndReasonText);
+        gameEndWidgets.row();
+        gameEndWidgets.add(exitToMenuButton).width(150).height(50);
+        gameEndWidgets.background(skin.getDrawable("greyPanel"));
+        gameEndWidgets.setPosition((Gdx.graphics.getWidth() / 2) - 100, (Gdx.graphics.getHeight() / 2) - 45);
+        gameEndWidgets.setWidth(200);
+        gameEndWidgets.setHeight(90);
     }
 
     /**
@@ -194,18 +233,48 @@ public class GameActors implements Disposable
     }
 
     /**
-     * Updates the actors for the next game round
-     * @param playerScore The new player score to display
-     * @param opponentScore The new opponent score to display
+     * Updates the actors for the next game round, or ends the game if a player has won
+     * @param result Information about the current rounds results
      */
-    public void nextRound(int playerScore, int opponentScore)
+    public void endRound(Packets.RoundResult result)
     {
-        playerScoreText.setText("Score: " + playerScore);
-        opponentScoreText.setText("Score: " + opponentScore);
+        playerScoreText.setText("Score: " + result.playerScore);
+        opponentScoreText.setText("Score: " + result.opponentScore);
+
+        //Refresh turn status text and show choice widgets again
         setPlayerStatusText("Waiting...", Color.RED);
         setOpponentStatusText("Waiting...", Color.RED);
         showChoiceWidgets();
+
+        //Show the end of game panel if the game is over
+        if(result.gameOver)
+        {
+            if(result.winner == 1)
+                endGame("You have won!");
+            else
+                endGame("You have lost!");
+        }
     }
+
+    /**
+     * Called when the game is ending
+     * Shows the gameEnd widgets and explains why the game is ending
+     * @param endGameMessage
+     */
+    public void endGame(String endGameMessage)
+    {
+        hideChoiceWidgets();
+        playerTurnStatusText.setVisible(false);
+        opponentTurnStatusText.setVisible(false);
+        gameEndReasonText.setText(endGameMessage);
+        gameEndWidgets.setVisible(true);
+    }
+
+    /**
+     * Gets the game info widgets
+     * @return The game info widgets
+     */
+    public Table getGameInfoWidgets() { return gameInfoWidgets; }
 
     /**
      * Gets the player info widgets
@@ -233,6 +302,12 @@ public class GameActors implements Disposable
     {
         return choiceWidgets;
     }
+
+    /**
+     * Gets the game end widgets
+     * @return The game end widgets
+     */
+    public Table getGameEndWidgets() { return gameEndWidgets; }
 
     @Override
     public void dispose()
