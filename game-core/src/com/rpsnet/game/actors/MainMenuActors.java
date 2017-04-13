@@ -41,6 +41,7 @@ public class MainMenuActors extends Table implements Disposable
     private final Label ingamePlayersText;
     private final Label waitingPlayersText;
     private final Label matchmakingText;
+    private final Label ipRequestText;
     private final Label nameRequestText;
 
     private final TextButton connectButton;
@@ -55,7 +56,9 @@ public class MainMenuActors extends Table implements Disposable
     private final Table menuWidgets;
     private final Table matchmakingWidgets;
 
+    private final TextField ipInput;
     private final TextField nameInput;
+
 
     public MainMenuActors(MainMenuScreen menuScreen)
     {
@@ -103,7 +106,7 @@ public class MainMenuActors extends Table implements Disposable
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 disableButton(connectButton);
-                mainMenuScreen.connectButtonPressed(nameInput.getText());
+                mainMenuScreen.connectButtonPressed(ipInput.getText(), nameInput.getText());
             }
         });
 
@@ -137,6 +140,7 @@ public class MainMenuActors extends Table implements Disposable
         //Create Labels
         logoText = new Label("Rock Paper Scissors!", bigLabelStyle);
         disconnectedText = new Label("Not connected", smallLabelStyle);
+        ipRequestText = new Label("Server IP: ", smallLabelStyle);
         nameRequestText = new Label("Enter Name: ", smallLabelStyle);
         welcomeText = new Label("Welcome, ", smallLabelStyle);
         totalPlayersText = new Label("Players online: -", smallLabelStyle);
@@ -159,6 +163,8 @@ public class MainMenuActors extends Table implements Disposable
         //Create input fields
         nameInput = new TextField("Player", textFieldStyle);
         nameInput.setMaxLength(12);
+        ipInput = new TextField("127.0.0.1", textFieldStyle);
+        ipInput.setMaxLength(20);
 
         //Create animated textures
         loadingTexture = new AnimatedTexture("UI/loadingSheet.png", 4, 2, 0.03f);
@@ -183,6 +189,9 @@ public class MainMenuActors extends Table implements Disposable
         disconnectedWidgets.left();
         disconnectedWidgets.top();
         disconnectedWidgets.add(disconnectedText).left().colspan(2);
+        disconnectedWidgets.row();
+        disconnectedWidgets.add(ipRequestText).left();
+        disconnectedWidgets.add(ipInput).padRight(10);
         disconnectedWidgets.row();
         disconnectedWidgets.add(nameRequestText).left();
         disconnectedWidgets.add(nameInput).padRight(10);

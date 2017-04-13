@@ -36,7 +36,12 @@ public class GameClient
         client.addListener(new ClientListener(this));
     }
 
-    public void attemptConnection(String inputName)
+    /**
+     * Attempts to connect to a server with the given name and IP address
+     * @param inputIP The user input IP
+     * @param inputName The user input name
+     */
+    public void attemptConnection(String inputIP, String inputName)
     {
         new Thread("Connect")
         {
@@ -47,7 +52,7 @@ public class GameClient
                 {
                     client.start();
                     name = inputName;
-                    client.connect(5000, "127.0.0.1", NetworkHandler.port);
+                    client.connect(5000, inputIP, NetworkHandler.port);
                 }
                 catch (IOException ex)
                 {

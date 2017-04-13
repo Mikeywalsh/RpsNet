@@ -86,14 +86,14 @@ public class MainMenuScreen implements Screen, NetScreen
 
     /**
      * Called when the connect button is pressed
-     * Attempts to connect to the remote server through the gameClient with the input player name
+     * Attempts to connect to the remote server through the gameClient with the input address and player name
      * @param name The input name of the player
      */
-    public void connectButtonPressed(String name)
+    public void connectButtonPressed(String ipAdress, String name)
     {
         //Reset the error message if there is one and attempt to connect
         displayErrorMessage("");
-        gameClient.attemptConnection(name);
+        gameClient.attemptConnection(ipAdress, name);
     }
 
     /**
