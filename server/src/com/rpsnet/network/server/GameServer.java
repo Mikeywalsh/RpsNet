@@ -6,6 +6,7 @@ import com.esotericsoftware.minlog.Log;
 import com.rpsnet.network.*;
 
 import java.io.IOException;
+import java.net.BindException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +54,16 @@ public class GameServer
 
         //Add a listener to the server and bind the port
         server.addListener(new ServerListener(this));
-        server.bind(NetworkHandler.port);
+        try
+        {
+            server.bind(NetworkHandler.port);
+        }
+        catch (BindException e)
+        {
+            System.out.println("Server instance already running on this machine!");
+            System.in.read();
+            return;
+        }
 
         //Start running the server
         server.start();
