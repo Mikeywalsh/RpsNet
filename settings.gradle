@@ -1,1 +1,1 @@
-include 'desktop', 'android', 'game-core', 'network-core', 'server'
+include 'desktop', 'game-core', 'network-core', 'server'
