@@ -99,7 +99,7 @@ public class GameServer
 
     /**
      * Removes a client from the hashmap of clients
-     * If the client was in a game, remove the game instance for the lsit of active games
+     * If the client was in a game, remove the game instance for the list of active games
      * @param connection The connection for the client being removed
      */
     public void removeClient(Connection connection)
