@@ -139,10 +139,7 @@ public class GameInstance
      */
     public boolean containsClient(RemoteClient client)
     {
-        if(player1.getRemoteClient() == client || player2.getRemoteClient() == client)
-            return true;
-        else
-            return false;
+        return player1.getRemoteClient() == client || player2.getRemoteClient() == client;
     }
 
     /**
