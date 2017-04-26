@@ -60,7 +60,7 @@ public class GameServer
         }
         catch (BindException e)
         {
-            System.out.println("Server instance already running on this machine!");
+            System.out.println("Port " + NetworkHandler.port + " is already being used on this machine, perhaps you already have a server running.");
             System.in.read();
             return;
         }
