@@ -13,17 +13,43 @@ import com.rpsnet.network.Packets;
 
 import java.io.IOException;
 
+/**
+ * This class is used as a bridge between Kryonet and Libgdx
+ * Allows the server to influence what appears onscreen
+ * Allows the client to send data to the server when required
+ */
 public class GameClient
 {
+	/**
+	 * The Kryonet client connection for this GameClient
+	 */
     private Client client;
-    private NetScreen currentScreen;
 
+	/**
+	 * The current game screen that is active
+	 */
+	private NetScreen currentScreen;
+
+	/**
+	 * The name of this client
+	 */
     private String name;
 
-    private Connection serverConnection;
+	/**
+	 * The connection to the server
+	 * Can be null
+	 */
+	private Connection serverConnection;
 
+	/**
+	 * Information about the amount of other players connected to the server
+	 */
     private Packets.PlayerCount playerCountInfo;
 
+    /**
+     * Creates a new GameClient and registers it with Kryonet
+     * Also attaches a ClientListener to it
+     */
     public GameClient()
     {
         //Create the client and start running it in another thread
@@ -111,7 +137,11 @@ public class GameClient
         ((MainMenuScreen)currentScreen).getGame().setGameInfo(setupInfo);
     }
 
-    public void makeChoice(GameChoice choice)
+	/**
+	 * Used to make a choice in the current game
+	 * @param choice The choice to make
+	 */
+	public void makeChoice(GameChoice choice)
     {
         if(!(currentScreen instanceof GameScreen))
             return;
@@ -125,40 +155,72 @@ public class GameClient
         serverConnection.sendTCP(choiceMade);
     }
 
-    public Packets.PlayerCount getPlayerCountInfo() { return playerCountInfo; }
+	/**
+	 * Gets the current player count information
+	 * @return The current player count information
+	 */
+	public Packets.PlayerCount getPlayerCountInfo() { return playerCountInfo; }
 
+	/**
+	 * Gets the name of this client
+	 * @return The name of this client
+	 */
     public String getPlayerName(){ return name; }
 
+	/**
+	 * Gets the current screen
+	 * @return The current screen
+	 */
+	public Screen getCurrentScreen()
+	{
+		return currentScreen;
+	}
+
+	/**
+	 * Sets the current screen to the passed in screen reference
+	 * @param screen The screen to set the current screen to
+	 */
     public void setCurrentScreen(NetScreen screen)
     {
         currentScreen = screen;
     }
 
-    public void setServerConnection(Connection con)
+	/**
+	 * Sets the server connection to the passed in reference
+	 * @param con The server set the connection of
+	 */
+	public void setServerConnection(Connection con)
     {
         serverConnection = con;
         updateCurrentScreen();
     }
 
-    public void setPlayerCountInfo(Packets.PlayerCount info)
+	/**
+	 * Sets the current player count info
+	 * Called when the server has updated the client about the current player count
+	 * @param info The current player count info
+	 */
+	public void setPlayerCountInfo(Packets.PlayerCount info)
     {
         playerCountInfo = info;
         updateCurrentScreen();
     }
 
-    public void updateCurrentScreen()
+	/**
+	 * Updates the current game screen with information about the server connection and any errors
+	 */
+	public void updateCurrentScreen()
     {
         Boolean connected = client.isConnected();
 
         currentScreen.updateConnectionInfo(connected);
     }
 
-    public Screen getCurrentScreen()
-    {
-        return currentScreen;
-    }
-
-    public void displayErrorMessage(String message)
+	/**
+	 * Displays an error message to the current screen
+	 * @param message The error message to display
+	 */
+	public void displayErrorMessage(String message)
     {
         currentScreen.displayErrorMessage(message);
     }

@@ -3,20 +3,17 @@ apply plugin: "java"
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 project.ext.mainClassName = "com.rpsnet.game.desktop.DesktopLauncher"
-project.ext.assetsDir = new File("../android/assets")
-
-task run(dependsOn: classes, type: JavaExec) {
-    main = project.mainClassName
-    classpath = sourceSets.main.runtimeClasspath
-    standardInput = System.in
-    workingDir = project.assetsDir
-}
+project.ext.assetsDir = new File("../game-core/assets")
 
 task dist(type: Jar) {
     from files(sourceSets.main.output.classesDir)
     from files(sourceSets.main.output.resourcesDir)
     from {configurations.compile.collect {zipTree(it)}}
     from files(project.assetsDir)
+
+    manifest {
+        attributes 'Main-Class': project.mainClassName
+    }
 }
 
 dist.dependsOn classes
@@ -29,4 +26,8 @@ task afterEclipseImport(description: "Post processing after project generation",
     printer.setPreserveWhitespace(true)
     printer.print(classpath)
   }
+}
+
+eclipse.project {
+    name = appName
 }

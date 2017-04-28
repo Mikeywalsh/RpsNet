@@ -11,6 +11,9 @@ import com.rpsnet.network.Packets;
  */
 public class RPSNet extends Game
 {
+	/**
+	 * The GameClient instance for the current game
+	 */
 	GameClient gameClient;
 
 	/**
@@ -52,11 +55,18 @@ public class RPSNet extends Game
 		}
 	}
 
+	/**
+	 * Sets the current screen to be the main menu screen
+	 */
 	private void setMenuScreen()
 	{
 		setScreen(new MainMenuScreen(this, gameClient));
 	}
 
+	/**
+	 * Sets the current screen to be the game screen
+	 * @param setupInfo Info with the initial conditions of the game
+	 */
 	private void setGameScreen(Packets.GameSetup setupInfo)
 	{
 		setScreen(new GameScreen(this, gameClient, setupInfo));

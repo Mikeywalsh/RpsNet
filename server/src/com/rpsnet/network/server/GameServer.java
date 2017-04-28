@@ -60,9 +60,7 @@ public class GameServer
         }
         catch (BindException e)
         {
-            System.out.println("Port " + NetworkHandler.port + " is already being used on this machine, perhaps you already have a server running.");
-            System.in.read();
-            return;
+            throw new BindException("Port " + NetworkHandler.port + " is already being used on this machine, perhaps you already have a server running.");
         }
 
         //Start running the server
@@ -78,7 +76,7 @@ public class GameServer
         //Start update thread
         updateThread = new UpdateThread();
         updateThread.gameServer = this;
-        updateThread.run();
+        new Thread(updateThread).start();
     }
 
     /**
@@ -348,5 +346,15 @@ public class GameServer
         {
             connection.sendTCP(playerCount);
         }
+    }
+
+    /**
+     * Gets the current amount of players in the provided state
+     * @param state The state to get the amount of players from
+     * @return The amount of players in the provided state
+     */
+    public int getPlayerCount(ClientState state)
+    {
+        return playerCount.get(state);
     }
 }
