@@ -4,7 +4,7 @@ There is a client and a server project.
 
 # Client
 Users run the client, input the IP address that the server is running on and a player name, and are then connected to the server.
-From here users can queue up for matchmaking, which is all handled by the server, allocation players to games when it can find a pair of queued players.
+From here users can queue up for matchmaking, which is all handled by the server, allocating players to games when it can find a pair of queued players.
 
 ![Menu screenshot](screenshots/screenshot1.png)
 
